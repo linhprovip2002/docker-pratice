@@ -3,9 +3,10 @@ import env from 'dotenv';
 import cacheService from './cacheService';
 import routers  from './router/index';
 import api from './api';
+import dbConfig from './config/db.config';
 env.config();
 console.log(process.env.REDIS_URL);
-
+dbConfig.connect();
 const app = express();
 app.use(express.json());
 

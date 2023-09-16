@@ -18,6 +18,7 @@
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
     "express": "^4.18.2",
+    "mongoose": "^7.5.1",
     "paypal-rest-sdk": "^1.8.1"
   }
 }
