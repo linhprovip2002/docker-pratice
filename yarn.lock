@@ -941,6 +941,11 @@ mongodb@5.8.1:
   optionalDependencies:
     "@mongodb-js/saslprep" "^1.1.0"
 
+mongoose-delete@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mongoose-delete/-/mongoose-delete-1.0.1.tgz#8db2f5b1a1d487351c1af18634c2c4e99d4cd1f2"
+  integrity sha512-vm24uep4UJOW3Ac8H/gDxURcwvl+1Cc2H7tIJ0O8ejDEFJIUoksKS9HzTOM4SvEJusAVQ0JpjhbttHpevUz71A==
+
 mongoose@^7.5.1:
   version "7.5.1"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-7.5.1.tgz#abb4a79d36df53d249784272d329fb400828ccfa"
