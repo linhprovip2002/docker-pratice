@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { mongoose_delete  } from 'mongoose-delete';
+const mongoose_delete = require('mongoose-delete');
 
 const productSchema = new mongoose.Schema({
     IDProduct : mongoose.Schema.Types.ObjectId,

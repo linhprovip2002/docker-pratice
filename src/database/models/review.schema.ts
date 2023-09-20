@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { mongoose_delete  } from 'mongoose-delete';
+const mongoose_delete = require('mongoose-delete');
 
 const reviewSchema = new mongoose.Schema({
     IDReview : mongoose.Schema.Types.ObjectId,

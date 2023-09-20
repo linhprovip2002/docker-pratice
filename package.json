@@ -3,7 +3,8 @@
     "start": "ts-node src/index.ts",
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint --ext .ts .",
+    "seed": "ts-node src/database/seeders/seed.ts"
   },
   "devDependencies": {
     "axios": "^1.5.0",

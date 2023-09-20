@@ -1,4 +1,4 @@
-import { paymentConfig } from '../../config';
+import { paymentConfig } from '../../database/config';
 import paypal from 'paypal-rest-sdk';
 
 class PaymentService {

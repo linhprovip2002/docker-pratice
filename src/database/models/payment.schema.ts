@@ -1,9 +1,9 @@
 import { statusPayment } from "./enum";
 import mongoose from 'mongoose';
-import mongoose_delete from 'mongoose-delete';
+const mongoose_delete = require('mongoose-delete');
 const paymentSchema = new mongoose.Schema({
     IDPayment: mongoose.Schema.Types.ObjectId,
-    statusPayment: { type: statusPayment, required: true },
+    statusPayment: { type: String, required: true, enum: Object.values(statusPayment) },
 }, { timestamps: true });
 
 paymentSchema.plugin(mongoose_delete, { overrideMethods: 'all' });

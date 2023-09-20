@@ -3,7 +3,7 @@ import env from 'dotenv';
 import cacheService from './cacheService';
 import routers  from './router/index';
 import api from './api';
-import dbConfig from './config/db.config';
+import dbConfig from './database/config/db.config';
 env.config();
 console.log(process.env.REDIS_URL);
 dbConfig.connect();

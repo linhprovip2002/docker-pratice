@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { mongoose_delete  } from 'mongoose-delete';
+const mongoose_delete = require('mongoose-delete');
+
 const permissionSchema = new mongoose.Schema({
     IDpermission: mongoose.Schema.Types.ObjectId,
     title: { type: String, required: true, unique: true, length: 20 },
