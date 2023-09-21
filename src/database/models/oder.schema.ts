@@ -4,7 +4,7 @@ import { statusOrder } from "./enum";
 
 const orderSchema = new mongoose.Schema({
     IDOder: mongoose.Schema.Types.ObjectId,
-    IDProduct: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    IDProduct: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
     IDCustomer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     payment: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment' },
     IDShipper: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

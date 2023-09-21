@@ -1,14 +1,14 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 const mongoose_delete = require('mongoose-delete');
 
 const userSchema = new mongoose.Schema({
-    IDUser: Schema.Types.ObjectId,
-    Roles: [{ type: Schema.Types.ObjectId, ref: 'Role', required: true }],
+    IDUser: mongoose.Schema.Types.ObjectId,
+    Roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role'}],
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    gender: { type: String, required: true },
-    phone: { type: String, required: true },
-    dayOfBirth: { type: Schema.Types.Date, required: true },
+    gender: { type: Boolean, required: true },
+    phone: { type: Number, required: true },
+    dayOfBirth: { type: mongoose.Schema.Types.Date, required: true },
     lastLogin: { type: Date },
     Address: { type: String, required: true },
     profilePicture: { type: String },

@@ -9,6 +9,7 @@ const permissionSchema = new mongoose.Schema({
 permissionSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
 const roleSchema = new mongoose.Schema({
     IDrole: mongoose.Schema.Types.ObjectId,
+    IDUser: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     IDPermission: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Permission' }],
     roleName: { type: String, required: true, unique: true, length: 20 },
     roleDescription: { type: String, required: true },

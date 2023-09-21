@@ -1,0 +1,8 @@
+{
+    "firstName": "Super",
+    "lastName": "Admin",
+    "gender": true,
+    "phone": "0123456789",
+    "dayOfBirth": "1990-01-01",
+    "Address":"Đa Nẵng"
+}
