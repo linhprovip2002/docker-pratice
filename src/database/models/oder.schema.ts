@@ -2,6 +2,15 @@ import mongoose from "mongoose";
 const mongoose_delete = require('mongoose-delete');
 import { statusOrder } from "./enum";
 
+const discountSchema = new mongoose.Schema({
+    IDDiscount: mongoose.Schema.Types.ObjectId,
+    IDSupplier: { type: mongoose.Schema.Types.ObjectId, ref: 'Supplier' },
+    typeDiscount: { type: String, required: true },
+    discount: { type: Number, required: true },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+}, { timestamps: true });
+
 const orderSchema = new mongoose.Schema({
     IDOder: mongoose.Schema.Types.ObjectId,
     IDProduct: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
@@ -21,7 +30,9 @@ const orderSchema = new mongoose.Schema({
     ShipPhone: { type: String, required: true },
 }, { timestamps: true });
 
+discountSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
 orderSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
 
+const Discount = mongoose.model('Discount', discountSchema);
 const Order = mongoose.model('Order', orderSchema);
-export default Order;
+export { Discount, Order }
