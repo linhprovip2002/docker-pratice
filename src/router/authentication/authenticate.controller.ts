@@ -28,6 +28,30 @@ class AuthenticationController {
             next(error);
           }
     }
+    async forgotPassword(req, res, next) {
+        try {
+            const { email } = req.body;
+            const account = await authenticateService.findAccountByEmail(email);
+            if(!account)
+            {
+                return res.status(401).send("Email not found");
+            }
+            await authenticateService.forgotPassword(account);
+            return res.status(200).json("Email sent.");
+        } catch (error) {
+            next(error);
+          }
+    }
+    async resetPassword(req, res, next) {
+        try {
+            const { tokenResetPassword } = req.params;
+            const { password } = req.body;
+            await authenticateService.resetPassword(tokenResetPassword, password);
+            return res.status(200).json("Password reset successfully.");
+        } catch (error) {
+            next(error);
+          }
+    }
 
 }
 export default new AuthenticationController();

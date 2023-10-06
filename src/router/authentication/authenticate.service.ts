@@ -1,5 +1,7 @@
 import { Account,User,Role } from "../../database/models";
 import { hashPassword, hashPasswordSalt, signJwt } from "../../service";
+import { mailService } from "../../service";
+import crypto from 'crypto';
 class AuthenticationService {
     constructor() {
 
@@ -11,7 +13,8 @@ class AuthenticationService {
                 userName,
                 password: ObjectPassword.passwordHashed,
                 email,
-                salt: ObjectPassword.salt
+                salt: ObjectPassword.salt,
+                passwordResetToken: crypto.randomBytes(20).toString('hex')
             });
             await account.save();
             const roleUser = await Role.findOne({ roleName: "User" });
@@ -52,6 +55,47 @@ class AuthenticationService {
             const account = await Account.findOne({ userName:username });
             return account;
         } catch (error) {
+            throw error;
+        }
+    }
+    async forgotPassword(account)
+    {
+        const htmlTemplate = `
+        <h1>Forgot Password</h1>
+        <p>Click <a href="http://localhost:3000/api/auth/reset-password/${account.passwordResetToken}">here</a> to reset your password</p>
+        `;
+        try {
+            mailService.sendMail(account.email, "Forgot Password", "", htmlTemplate);
+        }
+        catch(error)
+        {
+            throw error;
+        }
+    }
+    async resetPassword(tokenResetPassword, password)
+    {
+        try {
+            const account = await Account.findOne({ passwordResetToken: tokenResetPassword });
+            if(!account)
+            {
+                throw new Error("Token is invalid");
+            }
+            const hashPasswordUser = hashPasswordSalt(account.salt, password);
+            await account.updateOne({ password: hashPasswordUser, passwordResetToken: crypto.randomBytes(20).toString('hex') });
+        }
+        catch(error)
+        {
+            throw error;
+        }
+    }
+    async findAccountByEmail(email)
+    {
+        try {
+            const account = await Account.findOne({ email });
+            return account;
+        }
+        catch(error)
+        {
             throw error;
         }
     }

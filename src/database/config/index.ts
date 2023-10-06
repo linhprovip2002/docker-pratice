@@ -1,3 +1,4 @@
 import paymentConfig from './payment.config';
-
-export { paymentConfig };
+import { mailConfig } from './mail.config';
+import dbConfig from './db.config';
+export { paymentConfig, mailConfig, dbConfig};
