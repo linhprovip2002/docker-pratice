@@ -6,9 +6,9 @@ class AuthenticationController {
         try {
             const { username, password, email } = req.body;
             await authenticateService.register(username, password, email)
-            return res.status(200).json("Register successfully.");
+            return res.status(200).json({message:"User created successfully."});
         } catch (error) {
-            // Handle any errors that occur during the registration process
+           
             console.error("Error while saving permission:", error);
             next(error);
         }
@@ -20,7 +20,7 @@ class AuthenticationController {
             account?console.log("user found"):console.log("user not found");
             if(!account)
             {
-                return res.status(401).send("User not found");
+                return res.status(401).json({message:"Username not found."});
             }
             const token = await authenticateService.login(account, password);
             res.status(200).json({'token': token });
@@ -34,10 +34,10 @@ class AuthenticationController {
             const account = await authenticateService.findAccountByEmail(email);
             if(!account)
             {
-                return res.status(401).send("Email not found");
+                return res.status(401).json({message:"Email not found."});
             }
             await authenticateService.forgotPassword(account);
-            return res.status(200).json("Email sent.");
+            return res.status(200).json({message:"Email sent."});
         } catch (error) {
             next(error);
           }
@@ -47,7 +47,7 @@ class AuthenticationController {
             const { tokenResetPassword } = req.params;
             const { password } = req.body;
             await authenticateService.resetPassword(tokenResetPassword, password);
-            return res.status(200).json("Password reset successfully.");
+            return res.status(200).json({message:"Password reset successfully."});
         } catch (error) {
             next(error);
           }

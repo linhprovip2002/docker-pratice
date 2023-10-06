@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     profilePicture: { type: String },
 }, { timestamps: true });
 
-userSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
+userSchema.plugin(mongoose_delete , { overrideMethods: 'all',   deletedAt : true });
 
 const User = mongoose.model('User', userSchema);
 

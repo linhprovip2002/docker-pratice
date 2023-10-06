@@ -4,6 +4,7 @@ import cacheService from './cacheService';
 import routers  from './router/index';
 import api from './api';
 import { dbConfig } from './database/config';
+import { errorHandler } from './middleware';
 env.config();
 console.log(process.env.REDIS_URL);
 dbConfig.connect();
@@ -29,7 +30,7 @@ app.get('/products',async (_req, res) => {
   }
 });
 
-
+app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

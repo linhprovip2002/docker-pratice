@@ -11,7 +11,7 @@ const accountSchema = new mongoose.Schema({
     lastLogin: { type: Date },
 }, { timestamps: true });
 
-// Apply the mongoose-delete plugin to the schema
+
 accountSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
 
 const Account = mongoose.model('Account', accountSchema);

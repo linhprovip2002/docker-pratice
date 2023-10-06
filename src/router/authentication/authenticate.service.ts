@@ -17,8 +17,8 @@ class AuthenticationService {
                 passwordResetToken: crypto.randomBytes(20).toString('hex')
             });
             await account.save();
-            const roleUser = await Role.findOne({ roleName: "User" });
-            const accountA = await Account.findOne({ userName });
+            const roleUser = await Role.findOne({ roleName: "User",deleted: false });
+            const accountA = await Account.findOne({ userName,deleted: false });
             console.log(accountA);
             console.log(roleUser);
             const user = new User({
@@ -40,7 +40,7 @@ class AuthenticationService {
             {
                 throw new Error("Password incorrect");
             }
-            const user = await User.findOne({ account: account._id });
+            const user = await User.findOne({ account: account._id,deleted: false });
             console.log("hahahahaha" + user);
             const token = signJwt(user,account.email);
             return token;
@@ -52,7 +52,7 @@ class AuthenticationService {
     async findAccountByUserName(username)
     {
         try {
-            const account = await Account.findOne({ userName:username });
+            const account = await Account.findOne({ userName:username,deleted: false });
             return account;
         } catch (error) {
             throw error;
@@ -75,7 +75,7 @@ class AuthenticationService {
     async resetPassword(tokenResetPassword, password)
     {
         try {
-            const account = await Account.findOne({ passwordResetToken: tokenResetPassword });
+            const account = await Account.findOne({ passwordResetToken: tokenResetPassword,deleted: false });
             if(!account)
             {
                 throw new Error("Token is invalid");
@@ -91,7 +91,7 @@ class AuthenticationService {
     async findAccountByEmail(email)
     {
         try {
-            const account = await Account.findOne({ email });
+            const account = await Account.findOne({ email,deleted: false });
             return account;
         }
         catch(error)
