@@ -4,7 +4,7 @@
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint --ext .ts .",
-    "seed": "ts-node src/database/seeders/seed.ts src/database/seeders/seedAdmin.ts",
+    "seed": "ts-node src/database/seeders/seed.ts",
     "seedUser": "ts-node src/database/seeders/seedAdmin.ts"
   },
   "devDependencies": {

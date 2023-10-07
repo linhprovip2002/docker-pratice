@@ -99,6 +99,17 @@ class AuthenticationService {
             throw error;
         }
     }
+    async findPermissionByRoles(roles)
+    {
+        try {
+            const permissions = await Role.find({ roleName: { $in: roles },deleted: false });
+            return permissions;
+        }
+        catch(error)
+        {
+            throw error;
+        }
+    }
 }
 
 export default new AuthenticationService();

@@ -23,7 +23,7 @@ class AuthenticationController {
                 return res.status(401).json({message:"Username not found."});
             }
             const token = await authenticateService.login(account, password);
-            res.status(200).json({'token': token });
+            res.status(200).json({message:"Login successfully.",token:token});
         } catch (error) {
             next(error);
           }
