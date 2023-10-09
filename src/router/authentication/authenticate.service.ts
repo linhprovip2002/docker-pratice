@@ -18,11 +18,9 @@ class AuthenticationService {
             });
             await account.save();
             const roleUser = await Role.findOne({ roleName: "User",deleted: false });
-            const accountA = await Account.findOne({ userName,deleted: false });
-            console.log(accountA);
             console.log(roleUser);
             const user = new User({
-                account: accountA,
+                account: account,
                 Roles: roleUser
             });
             console.log(" day la user " + user);
@@ -102,7 +100,10 @@ class AuthenticationService {
     async findPermissionByRoles(roles)
     {
         try {
-            const permissions = await Role.find({ roleName: { $in: roles },deleted: false });
+            const permissions = await Role.find({ roleName: { $in: roles },deleted: false }).populate('Permissions');
+            console.log(permissions);
+            
+            
             return permissions;
         }
         catch(error)

@@ -35,6 +35,28 @@ class UserController {
             next(error);
         }
     }
+    async getRoles(req, res, next) {
+        res.status(200).json({ message: 'getRoles' });
+    }
+    async getPermissions(req, res, next) {
+        try {
+            const permissions = await userService.getPermissions();
+            res.status(200).json(permissions);
+        }catch(error)
+        {
+            next(error);
+        }
+    }
+    async addPermissionForRole(req, res, next) {
+        try {
+            const roleID = req.params.id;
+            const { body } = req.body;
+            await userService.addPermissionForRole(roleID, body);
+            res.status(200).json({ message: 'Permission added successfully' });
+        } catch (error) {
+            
+        }
+    }
 }
 
 export default new UserController();

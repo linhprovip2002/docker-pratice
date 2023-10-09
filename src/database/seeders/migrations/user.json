@@ -1,8 +1,8 @@
 {
-    "firstName": "Super",
-    "lastName": "Admin",
-    "gender": true,
-    "phone": "0123456789",
-    "dayOfBirth": "1990-01-01",
-    "Address":"Đa Nẵng"
+    "userName": "admin",
+    "password": "admin",
+    "email": "admin@localhost",
+    "firstname": "admin",
+    "lastname": "super",
+    "gender":true
 }
