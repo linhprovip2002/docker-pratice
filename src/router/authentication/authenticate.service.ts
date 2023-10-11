@@ -1,6 +1,7 @@
-import { Account,User,Role } from "../../database/models";
+import { Account,User,Role,Permission } from "../../database/models";
 import { hashPassword, hashPasswordSalt, signJwt } from "../../service";
 import { mailService } from "../../service";
+import mongoose from "mongoose";
 import crypto from 'crypto';
 class AuthenticationService {
     constructor() {
@@ -97,17 +98,34 @@ class AuthenticationService {
             throw error;
         }
     }
-    async findPermissionByRoles(roles)
-    {
+    async findPermissionByRoles(roles: string[]) {
         try {
-            const permissions = await Role.find({ roleName: { $in: roles },deleted: false }).populate('Permissions');
-            console.log(permissions);
+            const permissions = await Role.find({ _id: { $in: roles }, deleted: false });
+    
+            // Create an array to store permission IDs
+            const permissionIDs: mongoose.Types.ObjectId[] = [];
+            for (const role of permissions) {
+                // Iterate through the permissions associated with each role
+                for (const permissionID of role.IDPermission) {
+                    permissionIDs.push(permissionID);
+                }
+            }
+    
+            // console.log("Permission IDs: " + permissionIDs);
             
-            
-            return permissions;
+            return permissionIDs;
+        } catch (error) {
+            throw error;
         }
-        catch(error)
-        {
+    }
+    async findNamePermissionById(ids)
+    {
+        try{
+            const permissions = await Permission.find({ _id: { $in: ids },deleted: false });
+            return permissions.map(permission => permission.title);
+
+        }catch(error)
+        {   
             throw error;
         }
     }
