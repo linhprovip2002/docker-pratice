@@ -6,7 +6,10 @@ class UserService {
     }
     async getUsers(page? , limit?) {
         try {
-            const users = await User.find({deleted:false}).limit(limit).skip(page);
+            page ? page : null;
+            limit ? limit : null;
+            const skipCount = (page - 1) * limit
+            const users = await User.find({deleted:false}).limit(limit).skip(skipCount);
             return users;
         } catch(error) {
             throw error;
@@ -32,17 +35,32 @@ class UserService {
             throw error;
         }
     }
-    async getRoles() {
+    async getRoles(users: any[]) {
         try {
-            const roles = await Role.find({deleted:false});
-            return roles;
-        } catch(error) {
+            const resultData: any[] = [];
+    
+            // Use Promise.all to map users to their corresponding roles
+            await Promise.all(users.map(async (user) => {
+                console.log("here is user role", user.Roles);
+                const role = await Role.findById({ _id: user.Roles, deleted: false });
+                // Combine user and role data into a single object
+                const userDataWithRole = {
+                    user,
+                    role,
+                };
+                resultData.push(userDataWithRole);
+            }));
+    
+            return resultData;
+        } catch (error) {
             throw error;
         }
     }
-    async getPermissions() {
+    
+    async getPermissions(page?, limit?) {
         try {
-            const permissions = await Permission.find({deleted:false});
+            const skipCount = (page - 1) * limit
+            const permissions = await Permission.find({deleted:false}).limit(limit).skip(skipCount);
             return permissions;
             
         } catch (error) {
@@ -57,6 +75,24 @@ class UserService {
             role.set(body);
             await role.save();
         } catch (error) {
+            throw error;
+        }
+    }
+    async getAllRoles() {
+        try {
+            const roles = await Role.find({deleted:false});
+            return roles;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async addRoleForUser(userID, roleId) {
+        try {
+            const user = await User.findById({userID,deleted:false});
+            if(!user) throw new Error('User not found');
+            user.updateOne({Roles:roleId});
+            return true;
+        } catch (error) { 
             throw error;
         }
     }
