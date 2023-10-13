@@ -15,6 +15,7 @@ class AuthenticationController {
     }
     async login(req, res, next) {
         try {
+            
             const { username, password } = req.body;
             const account = await authenticateService.findAccountByUserName(username);
             account?console.log("user found"):console.log("user not found");

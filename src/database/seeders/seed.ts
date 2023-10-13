@@ -10,7 +10,6 @@ async function seedData() {
     console.log('Connected to the database successfully.');
     console.log(dataSeed);
 
-  
     const existingPermissions = await Permission.find({ title: { $in: dataSeed.map(permission => permission.title) } });
     const newPermissions = dataSeed.filter(permission => !existingPermissions.some(existing => existing.title === permission.title));
     
