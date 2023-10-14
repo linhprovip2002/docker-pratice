@@ -18,4 +18,3 @@ productSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
 
 const Product = mongoose.model('Product', productSchema);
 export default Product;
-    

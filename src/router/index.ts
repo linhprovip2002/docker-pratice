@@ -13,4 +13,5 @@ router.use('/auth', authRouter);
 router.use('/user',verify, userRouter);
 router.use('/product', productRouter);
 router.use('/category', categoryRouter);
+
 export default router;
