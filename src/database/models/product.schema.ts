@@ -3,9 +3,8 @@ const mongoose_delete = require('mongoose-delete');
 
 const productSchema = new mongoose.Schema({
     IDProduct : mongoose.Schema.Types.ObjectId,
-    // IDstock: { type: mongoose.Schema.Types.ObjectId, ref: 'Stock' },
+    IDstock: { type: mongoose.Schema.Types.ObjectId, ref: 'Stock' },
     IDCategory: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
-
     type: { type: String, required: true, unique: true, length: 20 },
     nameProduct: { type: String, required: true, unique: true, length: 20 },
     pictureLinks: [{ type: String }],

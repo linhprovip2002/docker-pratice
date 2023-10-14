@@ -5,6 +5,7 @@ import { statusOrder } from "./enum";
 const discountSchema = new mongoose.Schema({
     IDDiscount: mongoose.Schema.Types.ObjectId,
     IDSupplier: { type: mongoose.Schema.Types.ObjectId, ref: 'Supplier' },
+    IDproduct: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
     typeDiscount: { type: String, required: true },
     discount: { type: Number, required: true },
     startDate: { type: Date, required: true },
