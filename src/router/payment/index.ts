@@ -1,5 +1,5 @@
 import paymentController from "./payment.controller";
-import paymentRouter from "./payment.router.ts";
-import paymentService from "./payment.service.ts";
+import paymentRouter from "./payment.router";
+import paymentService from "./payment.service";
 
 export { paymentController, paymentRouter, paymentService };

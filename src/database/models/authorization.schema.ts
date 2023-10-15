@@ -7,6 +7,7 @@ const permissionSchema = new mongoose.Schema({
     description: { type: String, required: true },
 }, { timestamps: true });
 permissionSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
+
 const roleSchema = new mongoose.Schema({
     IDrole: mongoose.Schema.Types.ObjectId,
     IDUser: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
@@ -18,4 +19,5 @@ roleSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
 
 const Permission = mongoose.model('Permission', permissionSchema);
 const Role = mongoose.model('Role', roleSchema);
+
 export { Permission, Role };

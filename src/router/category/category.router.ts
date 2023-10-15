@@ -8,8 +8,4 @@ router.put('/:id', categoryController.updateCategory);
 router.delete('/:id', categoryController.deleteCategory);
 
 
-<<<<<<< HEAD
 export default router;
-=======
-export default router;
->>>>>>> 5debd489d95fa8c73cdf3d90b98bd416031591c5

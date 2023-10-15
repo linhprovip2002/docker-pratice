@@ -13,7 +13,6 @@ const supplierSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
-
 const stockSchema = new mongoose.Schema({
     IDStock : mongoose.Schema.Types.ObjectId,
     IDProduct: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
