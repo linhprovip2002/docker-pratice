@@ -21,7 +21,7 @@ app.get('/ping', (_req, res) => {
   return res.send('pong');
 });
 
-app.get('/products',async (_req, res) => {
+app.get('/product',async (_req, res) => {
   try {
     const products = await apiTest.getProducts();
     return res.status(200).json({ products });
