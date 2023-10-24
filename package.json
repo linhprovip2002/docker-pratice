@@ -23,6 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.1",
     "mongoose-delete": "^1.0.1",
+    "mongoose-slug-generator": "^1.0.4",
     "nodemailer": "^6.9.5",
     "paypal-rest-sdk": "^1.8.1"
   }

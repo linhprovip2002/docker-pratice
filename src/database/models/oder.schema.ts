@@ -13,7 +13,6 @@ const discountSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const orderSchema = new mongoose.Schema({
-    IDOder: mongoose.Schema.Types.ObjectId,
     IDProduct: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
     IDCustomer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     payment: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment' },

@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 const mongoose_delete = require('mongoose-delete');
 
 const reviewSchema = new mongoose.Schema({
-    IDReview : mongoose.Schema.Types.ObjectId,
     IDproduct: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
     IDcustomer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     rating: { type: Number, required: true, min: 1, max: 5  },

@@ -4,7 +4,6 @@ const mongoose_delete = require('mongoose-delete');
 
 
 const userSchema = new mongoose.Schema({
-    IDUser: mongoose.Schema.Types.ObjectId,
     account: { type: mongoose.Schema.Types.ObjectId, ref: 'Account' },
     Roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role'}],
     firstName: { type: String },

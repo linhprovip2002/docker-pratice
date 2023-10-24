@@ -15,7 +15,6 @@ const supplierSchema = new mongoose.Schema({
 
 
 const stockSchema = new mongoose.Schema({
-    IDStock : mongoose.Schema.Types.ObjectId,
     IDProduct: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
     supplierID: { type: mongoose.Schema.Types.ObjectId, ref: 'Supplier' },
     storageAddress: { type: String, required: true },
