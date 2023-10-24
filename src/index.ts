@@ -7,7 +7,7 @@ import { dbConfig } from './database/config';
 import { errorHandler } from './middleware';
 env.config();
 console.log(process.env.REDIS_URL);
-dbConfig.connect();
+
 const app = express();
 app.use(express.json());
 
@@ -31,6 +31,7 @@ app.get('/products',async (_req, res) => {
 });
 
 app.use(errorHandler);
+dbConfig.connect();
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
