@@ -5,12 +5,12 @@ const productSchema = new mongoose.Schema({
     IDstock: { type: mongoose.Schema.Types.ObjectId, ref: 'Stock' },
     IDSupplier: { type: mongoose.Schema.Types.ObjectId, ref: 'Supplier' },
     IDCategory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category'}],
-    type: { type: String, required: true, unique: true, length: 20 },
-    nameProduct: { type: String, required: true, unique: true, length: 20 },
+    type: { type: String, required: true, length: 20 },
+    nameProduct: { type: String, required: true, length: 20 },
     pictureLinks: [{ type: String }],
     description: { type: String, required: true },
-    color: [{ type: String, required: true, unique: true, length: 20 }],
-    size: [{ type: String, required: true, unique: true, length: 20 }],
+    color: [{ type: String, required: true, length: 20 }],
+    size: [{ type: String, required: true, length: 20 }],
     price: { type: String, required: true },
 }, { timestamps: true });
 
