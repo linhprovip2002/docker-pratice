@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 const mongoose_delete = require('mongoose-delete');
-
+import { statusUser } from './enum';
 
 
 const userSchema = new mongoose.Schema({
@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
     lastLogin: { type: Date },
     Address: { type: String },
     profilePicture: { type: String },
+    isActive: { type: String , enum: statusUser , default: statusUser.ACTIVE }
 }, { timestamps: true });
 
 userSchema.plugin(mongoose_delete , { overrideMethods: 'all',   deletedAt : true });

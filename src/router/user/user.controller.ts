@@ -75,7 +75,36 @@ class UserController {
             next(error);   
         }
     }
-    
+    async registerSellerService(req, res, next) {
+        try {
+            const userId = req.userToken.IDUser;
+            userService.registerSellerService(userId);
+            
+            return res.status(200).json({ message: 'Register seller service successfully' });
+        } catch(error) {
+            next(error);
+        }
+    }
+    async acceptSellerService(req, res, next) {
+        try {
+            const ids = req.body.userIds;
+            userService.acceptSellerService(ids);
+            return res.status(200).json({ message: 'Accept seller service successfully' });
+        } catch (error) {
+            next(error);
+        }
+    }
+    async getSellerService(req, res, next) {
+        try {
+            const { page, limit } = req.query;
+            page ? page : null;
+            limit ? limit : null;
+            const users = await userService.getSellerService( page, limit );
+            return res.status(200).json(users);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new UserController();

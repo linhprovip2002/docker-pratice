@@ -3,7 +3,8 @@ const mongoose_delete = require('mongoose-delete');
 
 const productSchema = new mongoose.Schema({
     IDstock: { type: mongoose.Schema.Types.ObjectId, ref: 'Stock' },
-    IDCategory: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
+    IDSupplier: { type: mongoose.Schema.Types.ObjectId, ref: 'Supplier' },
+    IDCategory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category'}],
     type: { type: String, required: true, unique: true, length: 20 },
     nameProduct: { type: String, required: true, unique: true, length: 20 },
     pictureLinks: [{ type: String }],
@@ -11,7 +12,6 @@ const productSchema = new mongoose.Schema({
     color: [{ type: String, required: true, unique: true, length: 20 }],
     size: [{ type: String, required: true, unique: true, length: 20 }],
     price: { type: String, required: true },
-    
 }, { timestamps: true });
 
 productSchema.plugin(mongoose_delete, { overrideMethods: 'all' });

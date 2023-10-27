@@ -19,7 +19,7 @@ const stockSchema = new mongoose.Schema({
     supplierID: { type: mongoose.Schema.Types.ObjectId, ref: 'Supplier' },
     storageAddress: { type: String, required: true },
     storageName: { type: String, required: true },
-    quantity: { type: Number, required: true },
+    isActive: { type: Boolean, default: true },
 }, { timestamps: true });
 
 supplierSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
