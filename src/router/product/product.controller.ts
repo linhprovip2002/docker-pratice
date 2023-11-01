@@ -79,6 +79,17 @@ class ProductController {
             next(error);
         }
     }
+
+    async getDiscountByProductId(req, res, next) {
+        try {
+            const { id } = req.params;
+            const discount = await productService.getDiscountByProductId(id);
+            return res.status(200).json(discount);
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }
 
 export default new ProductController();

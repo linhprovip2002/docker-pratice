@@ -12,7 +12,7 @@ router.get('/:id', checkAuthor('read supplier'), supplierController.getDetail);
 
 // stock
 router.post('/stocks/', checkAuthor('update supplier'), validatorStock, supplierController.createStock);
-router.post('/stocks/:id', checkAuthor('update supplier'), validatorStock, supplierController.updateStock);
+router.put('/stocks/:id', checkAuthor('update supplier'), validatorStock, supplierController.updateStock);
 router.get('/stocks/', checkAuthor('read supplier'), supplierController.getMyStocks);
 router.get('/stocks/:id', checkAuthor('read supplier'), supplierController.getProductsByStockId); 
 router.delete('/stocks/:id', checkAuthor('update supplier'), supplierController.deleteStock);

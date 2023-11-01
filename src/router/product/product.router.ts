@@ -5,7 +5,7 @@ import { productController } from './index';
 
 const router = express.Router();
 
-router.post('/:id', checkAuthor('update product'), productController.updateProduct);
+router.put('/:id', checkAuthor('update product'), productController.updateProduct);
 router.get('/', productController.getProducts); 
 router.get('/:id', productController.getOneProduct);
 router.delete('/:id', checkAuthor('delete product'), productController.deleteProduct); 
@@ -14,5 +14,8 @@ router.delete('/:id', checkAuthor('delete product'), productController.deletePro
 router.get('/:id/review', productController.getReviewByProductId);
 router.post('/:id/review', checkAuthor('create review'), validatorReview, productController.createReview);
 router.put('/:id/review/:idReview', checkAuthor('update review'), validatorReview, productController.updateReview);
+
+//discount 
+router.get('/:id/discount', productController.getDiscountByProductId);
 
 export default router;

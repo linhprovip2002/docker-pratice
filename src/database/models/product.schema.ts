@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
     color: [{ type: String, required: true, length: 20 }],
     size: [{ type: String, required: true, length: 20 }],
     price: { type: String, required: true },
+    quantity: {type: Number, required: true, min: 1, default: 1}
 }, { timestamps: true });
 
 productSchema.plugin(mongoose_delete, { overrideMethods: 'all' });

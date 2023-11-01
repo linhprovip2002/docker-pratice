@@ -1,4 +1,4 @@
-import { Product, Review } from '../../database/models'
+import { Product, Review, Discount } from '../../database/models'
 
 
 class ProductService {
@@ -30,7 +30,7 @@ class ProductService {
             const product = await Product.findById(id).where({deleted: false});
             if(!product) throw new Error('Product not found');
             const productUpdates = {};
-            for (const key of ['type', 'nameProduct', 'pictureLinks', 'description', 'color', 'size', 'price']) {
+            for (const key of ['type', 'nameProduct', 'pictureLinks', 'description', 'color', 'size', 'price', 'quantity']) {
             if (body[key]) {
                 productUpdates[key] = body[key];
             }
@@ -49,6 +49,15 @@ class ProductService {
             if(!product) throw new Error('Product not found');
             await product.set({deleted:true});
             await product.save();
+        } catch(error) {
+            throw error;
+        }
+    }
+
+    async getDiscountByProductId(id) {
+        try {
+            const discounts = await Discount.find({ IDproduct: id }).where({deleted: false});
+            return discounts;
         } catch(error) {
             throw error;
         }

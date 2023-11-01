@@ -189,6 +189,7 @@ class SupplierService {
                 color: body.color,
                 size: body.size,
                 price: body.price,
+                quantity: body.quantity
             });
             
             await product.save();
