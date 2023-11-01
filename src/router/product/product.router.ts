@@ -1,5 +1,6 @@
 import express from 'express';
 import { checkAuthor } from '../../middleware';
+import { validatorReview } from '../../middleware/validator.middleware';
 import { productController } from './index';
 
 const router = express.Router();
@@ -8,5 +9,10 @@ router.post('/:id', checkAuthor('update product'), productController.updateProdu
 router.get('/', productController.getProducts); 
 router.get('/:id', productController.getOneProduct);
 router.delete('/:id', checkAuthor('delete product'), productController.deleteProduct); 
+
+//review
+router.get('/:id/review', productController.getReviewByProductId);
+router.post('/:id/review', checkAuthor('create review'), validatorReview, productController.createReview);
+router.put('/:id/review/:idReview', checkAuthor('update review'), validatorReview, productController.updateReview);
 
 export default router;

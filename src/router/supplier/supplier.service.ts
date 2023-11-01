@@ -189,7 +189,7 @@ class SupplierService {
                 color: body.color,
                 size: body.size,
                 price: body.price,
-              });
+            });
             
             await product.save();
 

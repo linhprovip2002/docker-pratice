@@ -73,3 +73,16 @@ export const validatorProduct = (req, res, next) => {
     next();
 }
 
+export const validatorReview = (req, res, next) => {
+    const schema = Joi.object({
+      rating: Joi.number().min(1).max(5).required(),
+      comment: Joi.string().allow('').optional(),
+    });
+  
+    const { error } = schema.validate(req.body);
+    if (error) {
+      return res.status(400).json({'message':'rating must be number from 1 to 5' ,error});
+    }
+  
+    next();
+}
