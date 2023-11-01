@@ -26,7 +26,7 @@ class ProductController {
     async updateProduct(req, res, next) {
         try {
             const { id } = req.params;
-            const { body } = req.body;
+            const body = req.body;
             await productService.updateProduct(id, body);
             return res.status(200).json({ message: 'Product updated successfully' });
         } catch (error) {
@@ -44,6 +44,41 @@ class ProductController {
         }
     }
     
+    async getReviewByProductId(req, res, next) {
+        try {
+            const { page, limit } = req.query;
+            page ? page : null;
+            limit ? limit : null;
+            const { id } = req.params;
+            const reviews = await productService.getReviewByProductId(page, limit, id);
+            return res.status(200).json(reviews);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async createReview(req, res, next) {
+        try {
+            const userId = req.userToken.IDUser;
+            const { id } = req.params;
+            const body = req.body;
+            await productService.createReview(id, userId, body);
+            return res.status(200).json({ message: 'Review created successfully' });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async updateReview(req, res, next) {
+        try {
+            const { id, idReview } = req.params;
+            const body = req.body;
+            await productService.updateReview(id, idReview, body);
+            return res.status(200).json({ message: 'Review updated successfully' });
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new ProductController();
