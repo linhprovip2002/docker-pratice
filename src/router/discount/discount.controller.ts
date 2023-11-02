@@ -7,8 +7,9 @@ class DiscountController {
         try {
 
             const { idProduct } = req.params;
+            const userId = req.userToken.IDUser;
             const body = req.body;
-            await discountService.createDiscount(idProduct, body);
+            await discountService.createDiscount(idProduct, body, userId);
             return res.status(200).json({ message: 'Discount added successfully' });
         } catch (error) {
             next(error);
@@ -18,8 +19,9 @@ class DiscountController {
     async updateDiscount(req, res, next) {
         try {
             const { id } = req.params;
+            const userId = req.userToken.IDUser;
             const body = req.body;
-            await discountService.updateDiscount(id, body);
+            await discountService.updateDiscount(id, body, userId);
             return res.status(200).json({ message: 'Discount updated successfully' });
         } catch (error) {
             next(error);
@@ -29,7 +31,8 @@ class DiscountController {
     async deleteDiscount(req, res, next) {
         try {
             const { id } = req.params;
-            await discountService.deleteDiscount(id);
+            const userId = req.userToken.IDUser;
+            await discountService.deleteDiscount(id, userId);
             return res.status(200).json({ message: 'Discount deleted successfully' });
         } catch (error) {
             next(error);

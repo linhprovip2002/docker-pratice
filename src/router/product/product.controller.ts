@@ -26,8 +26,9 @@ class ProductController {
     async updateProduct(req, res, next) {
         try {
             const { id } = req.params;
+            const userId = req.userToken.IDUser;
             const body = req.body;
-            await productService.updateProduct(id, body);
+            await productService.updateProduct(id, body, userId);
             return res.status(200).json({ message: 'Product updated successfully' });
         } catch (error) {
             next(error);
@@ -37,7 +38,8 @@ class ProductController {
     async deleteProduct(req, res, next) {
         try {
             const { id } = req.params;
-            await productService.deleteProduct(id);
+            const userId = req.userToken.IDUser;
+            await productService.deleteProduct(id, userId);
             return res.status(200).json({ message: 'Product deleted successfully' });
         } catch (error) {
             next(error);
@@ -72,8 +74,9 @@ class ProductController {
     async updateReview(req, res, next) {
         try {
             const { id, idReview } = req.params;
+            const userId = req.userToken.IDUser;
             const body = req.body;
-            await productService.updateReview(id, idReview, body);
+            await productService.updateReview(id, idReview, body, userId);
             return res.status(200).json({ message: 'Review updated successfully' });
         } catch (error) {
             next(error);
