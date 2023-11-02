@@ -86,3 +86,19 @@ export const validatorReview = (req, res, next) => {
   
     next();
 }
+
+export const validatorDiscount = (req, res, next) => {
+    const schema = Joi.object({
+      typeDiscount: Joi.string().required(),
+      discount: Joi.number().min(0).max(100).required().min(0),
+      startDate: Joi.date().required(),
+      endDate: Joi.date().greater(Joi.ref('startDate')).required(),
+    });
+  
+    const { error } = schema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: 'Invalid discount', error });
+    }
+  
+    next();
+  }
