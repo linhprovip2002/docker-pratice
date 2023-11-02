@@ -4,6 +4,51 @@ import { Supplier, Stock, Product, Category } from '../../database/models'
 class SupplierService {
     _constructor() {
     }
+
+    async checkAccessStock(idStock, userID) {
+        try {
+            const stock = await Stock.findById(idStock).where({deleted: false});
+            // Nếu Stock không được tìm thấy, trả về false
+            if (!stock) {
+            return false;
+            }
+            // Lấy supplierID của Stock
+            const supplierID = stock.supplierID;
+            // Tìm kiếm Supplier có supplierID được lấy từ Stock
+            const supplier = await Supplier.findById(supplierID).where({deleted: false});
+            // Nếu Supplier không được tìm thấy, trả về false
+            if (!supplier) {
+            return false;
+            }
+            // Kiểm tra xem Supplier có userID được cung cấp hay không
+            if (supplier.userID !== userID) {
+            return false;
+            }
+            // Nếu tất cả các điều kiện trên đều được đáp ứng, trả về true
+            return true;
+        } catch(error) {
+            throw error;
+        }
+    }
+
+    async checkAccessSupplier(supplierID, userID) {
+        try {
+            const supplier = await Supplier.findById(supplierID).where({deleted: false});
+            // Nếu Supplier không được tìm thấy, trả về false
+            if (!supplier) {
+            return false;
+            }
+            // Kiểm tra xem Supplier có userID được cung cấp hay không
+            if (supplier.userID !== userID) {
+            return false;
+            }
+            // Nếu tất cả các điều kiện trên đều được đáp ứng, trả về true
+            return true;
+        } catch(error) {
+            throw error;
+        }
+    }
+
     async getAllSuppliers(page? , limit?) {
         try {
             page ? page : null;
@@ -37,8 +82,11 @@ class SupplierService {
         }
     }
 
-    async updateSupplier(id, body) {
+    async updateSupplier(id, body, userId) {
         try {
+            const checkAccess = await this.checkAccessSupplier(id, userId);
+            if (checkAccess == false) throw new Error('Supplier Access denied');
+
             const supplier = await Supplier.findById(id).where({deleted: false});
             if(!supplier) throw new Error('Supplier not found');
 
@@ -112,8 +160,11 @@ class SupplierService {
         }
     }
 
-    async updateStock(id, body) {
+    async updateStock(id, body, userId) {
         try {
+            const checkAccess = await this.checkAccessStock(id, userId);
+            if (checkAccess == false) throw new Error('Stock Access denied');
+
             const stock = await Stock.findById(id).where({deleted: false});
             if (!stock) {
                 throw new Error('Stock not found');
@@ -145,9 +196,12 @@ class SupplierService {
         }
     }
 
-    async getProductsByStockId(IDstock) {
+    async getProductsByStockId(IDstock, userId) {
         try {
-    
+
+            const checkAccess = await this.checkAccessStock(IDstock, userId);
+            if (checkAccess == false) throw new Error('Stock Access denied');
+
             const products = await Product.find({
                 deleted: false,
                 IDstock: IDstock
@@ -159,8 +213,11 @@ class SupplierService {
         }
     }
 
-    async deleteStock(id) {
+    async deleteStock(id, userId) {
         try {
+            const checkAccess = await this.checkAccessStock(id, userId);
+            if (checkAccess == false) throw new Error('Stock Access denied');
+
             const stock = await Stock.findById(id).where({deleted: false});
             if(!stock) throw new Error('Product not found');
             await stock.set({deleted:true});
@@ -170,8 +227,11 @@ class SupplierService {
         }
     }
 
-    async createProductinStock(id, body) {
+    async createProductinStock(id, body, userId) {
         try {
+            const checkAccess = await this.checkAccessStock(id, userId);
+            if (checkAccess == false) throw new Error('Stock Access denied');
+            
             const stock = await Stock.findById(id).where({deleted: false});
             if (!stock) {
                 throw new Error('Stock not found');

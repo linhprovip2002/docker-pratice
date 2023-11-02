@@ -1,9 +1,52 @@
-import { Product, Review, Discount } from '../../database/models'
+import { Product, Review, Discount, Supplier } from '../../database/models'
 
 
 class ProductService {
     _constructor() {
     }
+
+    async checkAccessReview(reviewID, userID) {
+        try {
+            const review = await Review.findById(reviewID).where({deleted: false});
+            if (!review) {
+            return false;
+            }
+            if (review.IDcustomer !== userID) {
+            return false;
+            }
+            // Nếu tất cả các điều kiện trên đều được đáp ứng, trả về true
+            return true;
+        } catch(error) {
+            throw error;
+        }
+    }
+
+    async checkAccessProduct(idProduct, userID) {
+        try {
+            const product = await Product.findById(idProduct).where({deleted: false});
+            // Nếu Product không được tìm thấy, trả về false
+            if (!product) {
+            return false;
+            }
+            // Lấy supplierID của Product
+            const supplierID = product.IDSupplier;
+            // Tìm kiếm Supplier có supplierID được lấy từ Product
+            const supplier = await Supplier.findById(supplierID).where({deleted: false});
+            // Nếu Supplier không được tìm thấy, trả về false
+            if (!supplier) {
+            return false;
+            }
+            // Kiểm tra xem Supplier có userID được cung cấp hay không
+            if (supplier.userID !== userID) {
+            return false;
+            }
+            // Nếu tất cả các điều kiện trên đều được đáp ứng, trả về true
+            return true;
+        } catch(error) {
+            throw error;
+        }
+    }
+
     async getProducts(page? , limit?) {
         try {
             page ? page : null;
@@ -25,8 +68,11 @@ class ProductService {
         }
     }
 
-    async updateProduct(id, body) {
+    async updateProduct(id, body, userId) {
         try {
+            const checkAccess = await this.checkAccessProduct(id, userId);
+            if (checkAccess == false) throw new Error('Product Access denied');
+
             const product = await Product.findById(id).where({deleted: false});
             if(!product) throw new Error('Product not found');
             const productUpdates = {};
@@ -43,8 +89,11 @@ class ProductService {
         }
     }
 
-    async deleteProduct(id) {
+    async deleteProduct(id, userId) {
         try {
+            const checkAccess = await this.checkAccessProduct(id, userId);
+            if (checkAccess == false) throw new Error('Product Access denied');
+
             const product = await Product.findById(id).where({deleted: false});
             if(!product) throw new Error('Product not found');
             await product.set({deleted:true});
@@ -120,8 +169,11 @@ class ProductService {
         }
     }
 
-    async updateReview(id, idReview, body) {
+    async updateReview(id, idReview, body, userId) {
         try {
+            const checkAccess = await this.checkAccessReview(idReview, userId);
+            if (checkAccess == false) throw new Error('Review Access denied');
+
             const product = await Product.findById(id);
             if (!product) {
             throw new Error('Product not found');

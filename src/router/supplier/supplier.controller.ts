@@ -27,8 +27,9 @@ class SupplierController {
     async updateSupplier(req, res, next) {
         try {
             const id = req.params.id;
+            const userId = req.userToken.IDUser;
             const body = req.body;
-            await supplierService.updateSupplier(id, body);
+            await supplierService.updateSupplier(id, body, userId);
             return res.status(200).json({ message: 'Supplier updated successfully' });
         } catch (error) {
             next(error);
@@ -59,8 +60,9 @@ class SupplierController {
     async updateStock(req, res, next) {
         try {
             const id = req.params.id;
+            const userId = req.userToken.IDUser;
             const body = req.body;
-            await supplierService.updateStock(id, body);
+            await supplierService.updateStock(id, body, userId);
             return res.status(200).json({ message: 'Supplier updated successfully' });
         } catch (error) {
             next(error);
@@ -80,7 +82,8 @@ class SupplierController {
     async getProductsByStockId(req, res, next) {
         try {
         const { id } = req.params;
-        const stockDetail = await supplierService.getProductsByStockId(id);
+        const userId = req.userToken.IDUser;
+        const stockDetail = await supplierService.getProductsByStockId(id, userId);
         return res.status(200).json(stockDetail);
 
         } catch (error) {
@@ -91,7 +94,8 @@ class SupplierController {
     async deleteStock(req, res, next) {
         try {
             const { id } = req.params;
-            await supplierService.deleteStock(id);
+            const userId = req.userToken.IDUser;
+            await supplierService.deleteStock(id, userId);
             return res.status(200).json({ message: 'Product deleted successfully' });
         } catch (error) {
             next(error);
@@ -101,8 +105,9 @@ class SupplierController {
     async createProductinStock(req, res, next) {
         try {
             const { id } = req.params; //id Stock
+            const userId = req.userToken.IDUser;
             const body = req.body;
-            await supplierService.createProductinStock(id, body);
+            await supplierService.createProductinStock(id, body, userId);
             return res.status(200).json({ message: 'Product added successfully' });
         } catch (error) {
             next(error);
