@@ -1,4 +1,4 @@
-import { Discount } from "../../database/models";
+// import { Discount } from "../../database/models";
 import discountService from "./discount.service";
 
 class DiscountController {

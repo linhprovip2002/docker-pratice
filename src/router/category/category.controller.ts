@@ -14,6 +14,15 @@ class CategoryController {
             next(error);
         }
     }
+
+    async getCategorys(req, res, next) {
+        try {
+            const categorys = await categoryService.getCategorys();
+            return res.status(200).json(categorys);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new CategoryController();

@@ -1,35 +1,10 @@
-import { Supplier, Stock, Product, Category } from '../../database/models'
+import { Supplier, Stock } from '../../database/models'
 
 
 class SupplierService {
     _constructor() {
     }
 
-    async checkAccessStock(idStock, userID) {
-        try {
-            const stock = await Stock.findById(idStock).where({deleted: false});
-            // Nếu Stock không được tìm thấy, trả về false
-            if (!stock) {
-            return false;
-            }
-            // Lấy supplierID của Stock
-            const supplierID = stock.supplierID;
-            // Tìm kiếm Supplier có supplierID được lấy từ Stock
-            const supplier = await Supplier.findById(supplierID).where({deleted: false});
-            // Nếu Supplier không được tìm thấy, trả về false
-            if (!supplier) {
-            return false;
-            }
-            // Kiểm tra xem Supplier có userID được cung cấp hay không
-            if (supplier.userID !== userID) {
-            return false;
-            }
-            // Nếu tất cả các điều kiện trên đều được đáp ứng, trả về true
-            return true;
-        } catch(error) {
-            throw error;
-        }
-    }
 
     async checkAccessSupplier(supplierID, userID) {
         try {
@@ -39,7 +14,7 @@ class SupplierService {
             return false;
             }
             // Kiểm tra xem Supplier có userID được cung cấp hay không
-            if (supplier.userID !== userID) {
+            if (supplier.userID != userID) {
             return false;
             }
             // Nếu tất cả các điều kiện trên đều được đáp ứng, trả về true
@@ -63,20 +38,29 @@ class SupplierService {
 
     async createSupplier(userId, body) {
         try {
-            const supplier = new Supplier(body);
+            const supplier = new Supplier({
+                companyName: body.companyName,
+                description: body.description,
+                contactEmail: body.contactEmail,
+                contactPhone: body.contactPhone,
+                address: body.address,
+            });
+            if (body.logoImage) {
+                supplier.logoImage = body.logoImage;
+            }
             supplier.userID = userId;
         
             // Create default stock
-            const stock = new Stock({
-              supplierID: supplier.IDSupplier,
-              storageName: `${supplier.companyName} 's storage`,
-              storageAddress: 'No information',
-              isActive: true,
-            });
+            // const stock = new Stock({
+            //   supplierID: supplier.IDSupplier,
+            //   storageName: `${supplier.companyName} 's storage`,
+            //   storageAddress: 'No information',
+            //   isActive: true,
+            // });
         
-            // Save supplier and stock
+            // // Save supplier and stock
             await supplier.save();
-            await stock.save();
+            // await stock.save();
         } catch(error) {
             throw error;
         }
@@ -142,128 +126,5 @@ class SupplierService {
         return getsupplierID;
     }
 
-    async createStock(userId, body) {
-        try {
-            const getsupplierID = await this.getSupplierIDByUserID(userId);
-
-            const stock = new Stock({
-                IDProduct: body.IDProduct,
-                supplierID: getsupplierID,
-                storageAddress: body.storageAddress,
-                storageName: body.storageName,
-                isActive: true,
-            });
-
-            await stock.save();
-        } catch(error) {
-            throw error;
-        }
-    }
-
-    async updateStock(id, body, userId) {
-        try {
-            const checkAccess = await this.checkAccessStock(id, userId);
-            if (checkAccess == false) throw new Error('Stock Access denied');
-
-            const stock = await Stock.findById(id).where({deleted: false});
-            if (!stock) {
-                throw new Error('Stock not found');
-            }
-
-            const updatedFields = {
-                storageAddress: body.storageAddress,
-                storageName: body.storageName,
-                isActive: body.isActive,
-            };
-
-            stock.set(updatedFields);
-            await stock.save();
-        } catch(error) {
-            throw error;
-        }
-    }
-
-    async getMyStocks(userId) {
-        try {
-            const getsupplierID = await this.getSupplierIDByUserID(userId);
-            const myStocks = await Stock.find({
-                 supplierID: getsupplierID,
-                 deleted: false
-                });
-            return myStocks;
-        } catch(error) {
-            throw error;
-        }
-    }
-
-    async getProductsByStockId(IDstock, userId) {
-        try {
-
-            const checkAccess = await this.checkAccessStock(IDstock, userId);
-            if (checkAccess == false) throw new Error('Stock Access denied');
-
-            const products = await Product.find({
-                deleted: false,
-                IDstock: IDstock
-            });
-    
-            return products;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async deleteStock(id, userId) {
-        try {
-            const checkAccess = await this.checkAccessStock(id, userId);
-            if (checkAccess == false) throw new Error('Stock Access denied');
-
-            const stock = await Stock.findById(id).where({deleted: false});
-            if(!stock) throw new Error('Product not found');
-            await stock.set({deleted:true});
-            await stock.save();
-        } catch(error) {
-            throw error;
-        }
-    }
-
-    async createProductinStock(id, body, userId) {
-        try {
-            const checkAccess = await this.checkAccessStock(id, userId);
-            if (checkAccess == false) throw new Error('Stock Access denied');
-            
-            const stock = await Stock.findById(id).where({deleted: false});
-            if (!stock) {
-                throw new Error('Stock not found');
-            }
-            const supplierID = this.getSupplierIDByStockID(id);
-            const categoryId = body.IDCategory;
-            const product = new Product({
-                IDstock: stock.id,
-                IDSupplier: supplierID,
-                IDCategory: categoryId,
-                type: body.type,
-                nameProduct: body.nameProduct,
-                pictureLinks: body.pictureLinks,
-                description: body.description,
-                color: body.color,
-                size: body.size,
-                price: body.price,
-                quantity: body.quantity
-            });
-            
-            await product.save();
-
-            // Thêm ID_Product vào property Category tương ứng
-            const category = await Category.findById(categoryId);
-            if (!category) {
-              throw new Error('Category not found');
-            }
-            category.IDProduct.push(product.id);
-            await category.save();
-        } catch(error) {
-            throw error;
-        }
-    }
 }
 export default new SupplierService();

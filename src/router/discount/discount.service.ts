@@ -20,7 +20,7 @@ class DiscountService {
             return false;
             }
             // Kiểm tra xem Supplier có userID được cung cấp hay không
-            if (supplier.userID !== userID) {
+            if (supplier.userID != userID) {
             return false;
             }
             // Nếu tất cả các điều kiện trên đều được đáp ứng, trả về true

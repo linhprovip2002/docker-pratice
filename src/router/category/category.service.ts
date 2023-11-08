@@ -1,4 +1,4 @@
-import { Category, Product } from '../../database/models'
+import { Category } from '../../database/models'
 
 
 class CategoryService {
@@ -7,21 +7,24 @@ class CategoryService {
 
     async getProductsByCategoryName(page, limit, slugstring) {
         try {
-            page ? page : null;
-            limit ? limit : null;    
-            const skipCount = (page - 1) * limit;
-    
-            const category = await Category.findOne({ slug: slugstring });
+            const category = await Category.findOne({ slug: slugstring }).populate('IDProduct');
             if (!category) {
                 throw new Error('Category not found');
             }
             
             // Lấy danh sách ID của các sản phẩm thuộc category
-            const productIds = category.IDProduct;
-            const products = await Product.find({ IDCategory: { $in: productIds } }).limit(limit).skip(skipCount);
-
+            const products = category.IDProduct;
             return products;
         } catch (error) {
+            throw error;
+        }
+    }
+
+    async getCategorys() {
+        try {
+            const categorys = await Category.find({deleted:false});
+            return categorys ;
+        } catch(error) {
             throw error;
         }
     }

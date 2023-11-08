@@ -5,7 +5,8 @@
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint --ext .ts .",
     "seed": "ts-node src/database/seeders/seed.ts",
-    "seedUser": "ts-node src/database/seeders/seedAdmin.ts"
+    "seedUser": "ts-node src/database/seeders/seedAdmin.ts",
+    "seedCategory": "ts-node src/database/seeders/seedCategory.ts"
   },
   "devDependencies": {
     "axios": "^1.5.0",

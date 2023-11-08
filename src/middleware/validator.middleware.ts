@@ -53,8 +53,6 @@ export const validatorStock = (req, res, next) => {
 
 export const validatorProduct = (req, res, next) => {
     const schema = Joi.object({
-      IDstock: Joi.string().required(),
-      IDSupplier: Joi.string().required(),
       IDCategory: Joi.array().items(Joi.string().required()),
       type: Joi.string().required().length(20),
       nameProduct: Joi.string().required(),
