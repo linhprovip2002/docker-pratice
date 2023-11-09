@@ -32,6 +32,10 @@ class DiscountService {
 
     async createDiscount(idProduct, body, userId) {
         try {
+
+            const checkAccess = await this.checkAccessProduct(idProduct, userId);
+            if (checkAccess == false) throw new Error('Product Access denied');
+
             const product = await Product.findById(idProduct).where({deleted: false});
 
             // Nếu đối tượng Product không được tìm thấy, trả về null

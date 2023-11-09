@@ -73,10 +73,10 @@ class ProductController {
 
     async updateReview(req, res, next) {
         try {
-            const { id, idReview } = req.params;
+            const { id } = req.params;
             const userId = req.userToken.IDUser;
             const body = req.body;
-            await productService.updateReview(id, idReview, body, userId);
+            await productService.updateReview(id, body, userId);
             return res.status(200).json({ message: 'Review updated successfully' });
         } catch (error) {
             next(error);

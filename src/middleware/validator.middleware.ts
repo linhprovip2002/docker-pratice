@@ -54,13 +54,14 @@ export const validatorStock = (req, res, next) => {
 export const validatorProduct = (req, res, next) => {
     const schema = Joi.object({
       IDCategory: Joi.array().items(Joi.string().required()),
-      type: Joi.string().required().length(20),
+      type: Joi.string().required(),
       nameProduct: Joi.string().required(),
       pictureLinks: Joi.array().items(Joi.string()),
       description: Joi.string().required(),
-      color: Joi.array().items(Joi.string().required().length(20)),
-      size: Joi.array().items(Joi.string().required().length(20)),
-      price: Joi.string().required(),
+      color: Joi.array().items(Joi.string().required()),
+      size: Joi.array().items(Joi.string().required()),
+      price: Joi.number().required().min(0),
+      quantity:Joi.number().required().min(0)
     });
   
     const { error } = schema.validate(req.body);
@@ -88,7 +89,7 @@ export const validatorReview = (req, res, next) => {
 export const validatorDiscount = (req, res, next) => {
     const schema = Joi.object({
       typeDiscount: Joi.string().required(),
-      discount: Joi.number().min(0).max(100).required().min(0),
+      discount: Joi.number().min(0).required(),
       startDate: Joi.date().required(),
       endDate: Joi.date().greater(Joi.ref('startDate')).required(),
     });

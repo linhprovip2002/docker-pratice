@@ -13,7 +13,7 @@ router.delete('/:id', checkAuthor('delete product'), productController.deletePro
 //review
 router.get('/:id/review', productController.getReviewByProductId);
 router.post('/:id/review', checkAuthor('create review'), validatorReview, productController.createReview);
-router.put('/:id/review/:idReview', checkAuthor('update review'), validatorReview, productController.updateReview);
+router.put('/:id/review', checkAuthor('update review'), validatorReview, productController.updateReview);
 
 //discount 
 router.get('/:id/discount', productController.getDiscountByProductId);

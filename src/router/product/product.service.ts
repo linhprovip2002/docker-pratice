@@ -151,26 +151,46 @@ class ProductService {
 
     async createReview(id, userId, body) {
         try {
-            const product = await Product.findById(id).where({deleted: false});
-            if (!product) {
-            throw new Error('Product not found');
-            }
-
-            const review = new Review({
-            IDproduct: id,
-            IDcustomer: userId,
-            rating: body.rating,
-            comment: body.comment,
+            const getreview = await Review.find({
+                deleted:false,
+                IDcustomer: userId
             });
+            if(!getreview)
+            {
+                const product = await Product.findById(id).where({deleted: false});
+                if (!product) {
+                throw new Error('Product not found');
+                }
 
-            await review.save();
+                const review = new Review({
+                IDproduct: id,
+                IDcustomer: userId,
+                rating: body.rating,
+                comment: body.comment,
+                });
+
+                await review.save();
+            }
+            else
+            {
+                throw new Error('1 person can only write 1 review per product'); 
+            }
         } catch(error) {
             throw error;
         }
     }
 
-    async updateReview(id, idReview, body, userId) {
+    async updateReview(id, body, userId) {
         try {
+            const getreview = await Review.findOne({
+                deleted:false,
+                IDcustomer: userId
+            });
+            if(!getreview)
+            {
+                throw new Error('Review not found');
+            }
+            const idReview = getreview._id;
             const checkAccess = await this.checkAccessReview(idReview, userId);
             if (checkAccess == false) throw new Error('Review Access denied');
 
@@ -178,17 +198,11 @@ class ProductService {
             if (!product) {
             throw new Error('Product not found');
             }
-
-            const review = await Review.findById(idReview);
-            if (!review) {
-            throw new Error('Review not found');
-            }
-
-            review.rating = body.rating;
-            review.comment = body.comment;
+            getreview.rating = body.rating;
+            getreview.comment = body.comment;
 
             // Lưu review vào cơ sở dữ liệu
-            await review.save();
+            await getreview.save();
         } catch(error) {
             throw error;
         }

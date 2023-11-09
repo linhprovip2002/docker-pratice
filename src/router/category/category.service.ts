@@ -7,7 +7,10 @@ class CategoryService {
 
     async getProductsByCategoryName(page, limit, slugstring) {
         try {
-            const category = await Category.findOne({ slug: slugstring }).populate('IDProduct');
+            const category = await Category.findOne({ slug: slugstring }).populate({
+                path: 'IDProduct',
+                match: { deleted: false }
+            });
             if (!category) {
                 throw new Error('Category not found');
             }
