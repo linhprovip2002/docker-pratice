@@ -24,3 +24,80 @@ export const validatorRegister = (req, res, next) => {
     next();
 }
 
+export const validatorSupplier = (req, res, next) => {
+    const schema = Joi.object({
+        companyName: Joi.string().required(),
+        description: Joi.string().required(),
+        contactEmail: Joi.string().email().required(),
+        contactPhone: Joi.string().regex(/^[0-9]{10}$/).required(),
+        address: Joi.string().required()
+    }).options({ allowUnknown: true });;
+    const { error } = schema.validate(req.body);
+    if (error) {
+        return res.status(400).json(error);
+    }
+    next();
+}
+
+export const validatorStock = (req, res, next) => {
+    const schema = Joi.object({
+        storageAddress: Joi.string().required(),
+        storageName: Joi.string().required()
+    }).options({ allowUnknown: true });;
+    const { error } = schema.validate(req.body);
+    if (error) {
+        return res.status(400).json(error);
+    }
+    next();
+}
+
+export const validatorProduct = (req, res, next) => {
+    const schema = Joi.object({
+      IDCategory: Joi.array().items(Joi.string().required()),
+      type: Joi.string().required(),
+      nameProduct: Joi.string().required(),
+      pictureLinks: Joi.array().items(Joi.string()),
+      description: Joi.string().required(),
+      color: Joi.array().items(Joi.string().required()),
+      size: Joi.array().items(Joi.string().required()),
+      price: Joi.number().required().min(0),
+      quantity:Joi.number().required().min(0)
+    }).options({ allowUnknown: true });;
+  
+    const { error } = schema.validate(req.body);
+    if (error) {
+      return res.status(400).json(error);
+    }
+  
+    next();
+}
+
+export const validatorReview = (req, res, next) => {
+    const schema = Joi.object({
+      rating: Joi.number().min(1).max(5).required(),
+      comment: Joi.string().allow('').optional(),
+    }).options({ allowUnknown: true });;
+  
+    const { error } = schema.validate(req.body);
+    if (error) {
+      return res.status(400).json({'message':'rating must be number from 1 to 5' ,error});
+    }
+  
+    next();
+}
+
+export const validatorDiscount = (req, res, next) => {
+    const schema = Joi.object({
+      typeDiscount: Joi.string().required(),
+      discount: Joi.number().min(0).required(),
+      startDate: Joi.date().required(),
+      endDate: Joi.date().greater(Joi.ref('startDate')).required(),
+    }).options({ allowUnknown: true });;
+  
+    const { error } = schema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: 'Invalid discount', error });
+    }
+  
+    next();
+  }

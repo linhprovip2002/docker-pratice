@@ -5,12 +5,13 @@
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint --ext .ts .",
     "seed": "ts-node src/database/seeders/seed.ts",
-    "seedUser": "ts-node src/database/seeders/seedAdmin.ts"
+    "seedUser": "ts-node src/database/seeders/seedAdmin.ts",
+    "seedCategory": "ts-node src/database/seeders/seedCategory.ts"
   },
   "devDependencies": {
     "axios": "^1.5.0",
     "dotenv": "^16.3.1",
-    "redis": "^4.6.8",
+    "redis": "^4.6.10",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.2"
