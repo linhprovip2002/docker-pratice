@@ -31,7 +31,7 @@ export const validatorSupplier = (req, res, next) => {
         contactEmail: Joi.string().email().required(),
         contactPhone: Joi.string().regex(/^[0-9]{10}$/).required(),
         address: Joi.string().required()
-    });
+    }).options({ allowUnknown: true });;
     const { error } = schema.validate(req.body);
     if (error) {
         return res.status(400).json(error);
@@ -43,7 +43,7 @@ export const validatorStock = (req, res, next) => {
     const schema = Joi.object({
         storageAddress: Joi.string().required(),
         storageName: Joi.string().required()
-    });
+    }).options({ allowUnknown: true });;
     const { error } = schema.validate(req.body);
     if (error) {
         return res.status(400).json(error);
@@ -62,7 +62,7 @@ export const validatorProduct = (req, res, next) => {
       size: Joi.array().items(Joi.string().required()),
       price: Joi.number().required().min(0),
       quantity:Joi.number().required().min(0)
-    });
+    }).options({ allowUnknown: true });;
   
     const { error } = schema.validate(req.body);
     if (error) {
@@ -76,7 +76,7 @@ export const validatorReview = (req, res, next) => {
     const schema = Joi.object({
       rating: Joi.number().min(1).max(5).required(),
       comment: Joi.string().allow('').optional(),
-    });
+    }).options({ allowUnknown: true });;
   
     const { error } = schema.validate(req.body);
     if (error) {
@@ -92,7 +92,7 @@ export const validatorDiscount = (req, res, next) => {
       discount: Joi.number().min(0).required(),
       startDate: Joi.date().required(),
       endDate: Joi.date().greater(Joi.ref('startDate')).required(),
-    });
+    }).options({ allowUnknown: true });;
   
     const { error } = schema.validate(req.body);
     if (error) {
