@@ -16,7 +16,7 @@ const orderSchema = new mongoose.Schema({
     IDProduct: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
     IDCustomer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     payment: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment' },
-    oderDate: {
+    orderDate: {
         type: Date,
         required: true,
     },

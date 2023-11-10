@@ -1,6 +1,10 @@
 [   
+  {
+    "title":"Supplier",
+    "description":"The supplier is the person who supplies the products to the store"
+ },
     {
-       "title":"Authoriztion",
+       "title":"Authorization",
        "description":"The Super Admin can access all the endpoints"
     },
     {

@@ -1,7 +1,7 @@
 import Account from "./account.schema";
 import { Role, Permission } from "./authorization.schema";
 import  User  from "./user.schema";
-import {Order,Discount} from "./oder.schema";
+import {Order,Discount} from "./order.schema";
 import Product from "./product.schema";
 import  Payment  from "./payment.schema";
 import Review from "./review.schema";

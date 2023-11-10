@@ -1,0 +1,27 @@
+[
+  {
+      "CategoryName": "Men's Watches",
+      "Description": "This category contains watches for men.",
+      "slug": "mens-watches"
+  },
+  {
+      "CategoryName": "Women's Watches",
+      "Description": "This category contains watches for women.",
+      "slug": "womens-watches"
+  },
+  {
+      "CategoryName": "Children's Watches",
+      "Description": "This category contains watches for children.",
+      "slug": "childrens-watches"
+  },
+  {
+      "CategoryName": "Luxury Watches",
+      "Description": "This category contains luxury watches.",
+      "slug": "luxury-watches"
+  },
+  {
+      "CategoryName": "Smart Watches",
+      "Description": "This category contains smart watches.",
+      "slug": "smart-watches"
+  }
+]

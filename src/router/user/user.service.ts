@@ -1,4 +1,4 @@
-import { User,Role,Permission,Account } from '../../database/models'
+import { User,Role,Account } from '../../database/models'
 import { statusUser } from '../../database/models/enum'
 import { mailService } from '../../service';
 class UserService {
@@ -17,7 +17,8 @@ class UserService {
     }
     async updateUser(id, body) {
         try {
-            const user = await User.findById({id,deleted:false});
+
+            const user = await User.findById({_id:id,deleted:false});
             if(!user) throw new Error('User not found');
             user.set(body);
             await user.save();
@@ -27,7 +28,7 @@ class UserService {
     }
     async deleteUser(id) {
         try {
-            const user = await User.findById({id,deleted:false});
+            const user = await User.findById({_id:id,deleted:false});
             if(!user) throw new Error('User not found');
             await user.set({deleted:true});
             await user.save();
@@ -55,38 +56,9 @@ class UserService {
             throw error;
         }
     }
-    
-    async getPermissions(page?, limit?) {
-        try {
-            const skipCount = (page - 1) * limit
-            const permissions = await Permission.find({deleted:false}).limit(limit).skip(skipCount);
-            return permissions;
-            
-        } catch (error) {
-            throw error;
-        }
-    }
-    async addPermissionForRole(roleID, body) {
-        try {
-            const role = await Role.findById({roleID,deleted:false});
-            if(!role) throw new Error('Role not found');
-            role.set(body);
-            await role.save();
-        } catch (error) {
-            throw error;
-        }
-    }
-    async getAllRoles() {
-        try {
-            const roles = await Role.find({deleted:false});
-            return roles;
-        } catch (error) {
-            throw error;
-        }
-    }
     async addRoleForUser(userID, roleId) {
         try {
-            const user = await User.findById({userID,deleted:false});
+            const user = await User.findById({_id:userID,deleted:false});
             if(!user) throw new Error('User not found');
             user.updateOne({Roles:roleId});
             return true;
@@ -110,10 +82,17 @@ class UserService {
                 _id: { $in: userIds },
                 deleted: false
             }).populate('account');
+            // console.log(users);
+            
             for (const user of users) {
+               
+                
                 // Populate the 'account' field to get the actual account object
                     const account = await Account.findById(user.account);
                     user.isActive = statusUser.ACCEPTED;
+                    const role = await Role.findOne({ roleName: 'Seller' });
+                    if (!role) { throw new Error('Role not found'); }
+                    user.Roles = [role._id];
                     await user.save();
                     if (account === null) { throw new Error('Account not found'); }
                     const email = account.email;
@@ -142,6 +121,9 @@ class UserService {
         } catch (error) {
             throw error;
         }
+    }
+    async getUserById(id) {
+        return await User.findById(id);
     }
 }
 export default new UserService();
