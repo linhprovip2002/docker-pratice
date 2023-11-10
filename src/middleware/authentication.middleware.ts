@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import env from 'dotenv';
 env.config();
 export async function verify(req, res, next) {
-    try {
+    try {      
       const jwtSecret = process.env.JWT_SECRET;
   
       if (!jwtSecret) {

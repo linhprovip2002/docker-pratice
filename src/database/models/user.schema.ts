@@ -5,7 +5,7 @@ import { statusUser } from './enum';
 
 const userSchema = new mongoose.Schema({
     account: { type: mongoose.Schema.Types.ObjectId, ref: 'Account' },
-    Roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role'}],
+    Roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role', unique: true}],
     firstName: { type: String },
     lastName: { type: String },
     gender: { type: Boolean },

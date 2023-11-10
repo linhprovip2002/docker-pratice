@@ -52,7 +52,7 @@ class ProductService {
             page ? page : null;
             limit ? limit : null;
             const skipCount = (page - 1) * limit
-            const products = await Product.find({deleted:false}).limit(limit).skip(skipCount);
+            const products = await Product.find({deleted:false}).limit(limit).skip(skipCount).populate({path:'IDSupplier',select:'companyName description logoImage address'}).populate({path:'IDCategory',select:'CategoryName'});
             return products;
         } catch(error) {
             throw error;
