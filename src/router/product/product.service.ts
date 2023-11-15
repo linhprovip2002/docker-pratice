@@ -148,6 +148,7 @@ class ProductService {
 
     async getOneProduct(id) {
         try {
+            await this.updateRatingsForAllProducts();
             const product = await Product.findById(id).where({deleted: false});
             return product;
         } catch(error) {
