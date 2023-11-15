@@ -1,4 +1,4 @@
-import { Supplier, Stock } from '../../database/models'
+import { Supplier, Stock, User, Role } from '../../database/models'
 
 
 class SupplierService {
@@ -8,6 +8,23 @@ class SupplierService {
 
     async checkAccessSupplier(supplierID, userID) {
         try {
+            const user = await User.findById(userID).populate({
+                path: 'Roles',
+                match: { deleted: false }
+            });
+
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            const superUserRole = await Role.findOne({ roleName: 'superUser' });
+            if (!superUserRole) {
+                throw new Error('superUser role not found');
+            }
+
+            const isSuperUser = user.Roles.some(role => role.equals(superUserRole._id));
+            if (isSuperUser == true) return true;
+
             const supplier = await Supplier.findById(supplierID).where({deleted: false});
             // Nếu Supplier không được tìm thấy, trả về false
             if (!supplier) {
