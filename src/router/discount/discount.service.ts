@@ -1,4 +1,4 @@
-import { Discount, Product, Supplier } from '../../database/models'
+import { Discount, Product, Supplier, User, Role } from '../../database/models'
 
 
 class DiscountService {
@@ -6,6 +6,23 @@ class DiscountService {
     }
     async checkAccessProduct(idProduct, userID) {
         try {
+            const user = await User.findById(userID).populate({
+                path: 'Roles',
+                match: { deleted: false }
+            });
+
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            const superUserRole = await Role.findOne({ roleName: 'superUser' });
+            if (!superUserRole) {
+                throw new Error('superUser role not found');
+            }
+
+            const isSuperUser = user.Roles.some(role => role.equals(superUserRole._id));
+            if (isSuperUser == true) return true;
+
             const product = await Product.findById(idProduct).where({deleted: false});
             // Nếu Product không được tìm thấy, trả về false
             if (!product) {

@@ -1,4 +1,4 @@
-import { Supplier, Stock, Product, Category } from '../../database/models'
+import { Supplier, Stock, Product, Category, User, Role } from '../../database/models'
 
 class StockService {
     _constructor() {
@@ -6,6 +6,24 @@ class StockService {
 
     async checkAccessStock(idStock, userID) {
         try {
+
+            const user = await User.findById(userID).populate({
+                path: 'Roles',
+                match: { deleted: false }
+            });
+
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            const superUserRole = await Role.findOne({ roleName: 'superUser' });
+            if (!superUserRole) {
+                throw new Error('superUser role not found');
+            }
+
+            const isSuperUser = user.Roles.some(role => role.equals(superUserRole._id));
+            if (isSuperUser == true) return true;
+
             const stock = await Stock.findById(idStock).where({deleted: false});
             // Nếu Stock không được tìm thấy, trả về false
             if (!stock) {
@@ -32,6 +50,24 @@ class StockService {
 
     async checkAccessSupplier(supplierID, userID) {
         try {
+
+            const user = await User.findById(userID).populate({
+                path: 'Roles',
+                match: { deleted: false }
+            });
+
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            const superUserRole = await Role.findOne({ roleName: 'superUser' });
+            if (!superUserRole) {
+                throw new Error('superUser role not found');
+            }
+
+            const isSuperUser = user.Roles.some(role => role.equals(superUserRole._id));
+            if (isSuperUser == true) return true;
+
             const supplier = await Supplier.findById(supplierID).where({deleted: false});
             // Nếu Supplier không được tìm thấy, trả về false
             if (!supplier) {

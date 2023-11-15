@@ -1,4 +1,4 @@
-import { Product, Review, Discount, Supplier } from '../../database/models'
+import { Product, Review, Discount, Supplier, User, Role } from '../../database/models'
 
 
 class ProductService {
@@ -7,6 +7,24 @@ class ProductService {
 
     async checkAccessReview(reviewID, userID) {
         try {
+
+            const user = await User.findById(userID).populate({
+                path: 'Roles',
+                match: { deleted: false }
+            });
+
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            const superUserRole = await Role.findOne({ roleName: 'superUser' });
+            if (!superUserRole) {
+                throw new Error('superUser role not found');
+            }
+
+            const isSuperUser = user.Roles.some(role => role.equals(superUserRole._id));
+            if (isSuperUser == true) return true;
+
             const review = await Review.findById(reviewID).where({deleted: false});
             if (!review) {
             return false;
@@ -23,6 +41,24 @@ class ProductService {
 
     async checkAccessProduct(idProduct, userID) {
         try {
+
+            const user = await User.findById(userID).populate({
+                path: 'Roles',
+                match: { deleted: false }
+            });
+
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            const superUserRole = await Role.findOne({ roleName: 'superUser' });
+            if (!superUserRole) {
+                throw new Error('superUser role not found');
+            }
+
+            const isSuperUser = user.Roles.some(role => role.equals(superUserRole._id));
+            if (isSuperUser == true) return true;
+
             const product = await Product.findById(idProduct).where({deleted: false});
             // Nếu Product không được tìm thấy, trả về false
             if (!product) {
@@ -47,11 +83,62 @@ class ProductService {
         }
     }
 
+    async calculateAverageRating(productId) {
+        try {
+            const reviews = await Review.find({
+                deleted:false,
+                IDproduct: productId
+            });
+    
+            if (reviews.length === 0) {
+                return 0; // Hoặc giá trị mặc định tùy thuộc vào logic của bạn
+            }
+    
+            let totalRating = 0;
+            for (const review of reviews) {
+                if (review.rating !== undefined) {
+                    totalRating += review.rating;
+                }
+            }
+    
+            const averageRating = totalRating / reviews.length;
+            return averageRating;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async updateRatingsForAllProducts() {
+        try {
+            // Lấy danh sách tất cả các sản phẩm
+            const allProducts = await Product.find({deleted:false});
+    
+            for (const product of allProducts) {
+                const averageRating = await this.calculateAverageRating(product._id);
+    
+                // Cập nhật giá trị rating cho từng sản phẩm
+                product.rating = averageRating;
+                try {
+                    // Sử dụng set và save để cập nhật dữ liệu vào MongoDB
+                    await product.save();
+                    console.log(`Product ${product._id} updated.`);
+                } catch (error) {
+                    console.error(`Failed to update product ${product._id}:`, error);
+                }
+            }
+    
+            console.log('Update ratings for all products completed.');
+        } catch (error) {
+            console.error('Failed to fetch products:', error);
+        }
+    }
+
     async getProducts(page? , limit?) {
         try {
             page ? page : null;
             limit ? limit : null;
-            const skipCount = (page - 1) * limit
+            const skipCount = (page - 1) * limit;
+            await this.updateRatingsForAllProducts();
             const products = await Product.find({deleted:false}).limit(limit).skip(skipCount);
             return products;
         } catch(error) {
@@ -122,28 +209,28 @@ class ProductService {
                 IDproduct: id
             }).limit(limit).skip(skipCount);
             
-            let totalRating = 0;
-            for (const review of reviews) {
-            if (review.rating !== undefined) {
-                totalRating += review.rating;
-            }
-            }
-            const averageRating = totalRating / reviews.length;
+            // let totalRating = 0;
+            // for (const review of reviews) {
+            // if (review.rating !== undefined) {
+            //     totalRating += review.rating;
+            // }
+            // }
+            // const averageRating = totalRating / reviews.length;
 
-            // Tạo nested json format
-            const result = {
-                id: id,
-                average_rating: averageRating,
-                reviews: reviews.map((review) => ({
-                IDcustomer: review.IDcustomer,
-                rating: review.rating,
-                comment: review.comment,
-                createdAt: review.createdAt,
-                updatedAt: review.updatedAt,
-                })),
-            };
+            // // Tạo nested json format
+            // const result = {
+            //     id: id,
+            //     average_rating: averageRating,
+            //     reviews: reviews.map((review) => ({
+            //     IDcustomer: review.IDcustomer,
+            //     rating: review.rating,
+            //     comment: review.comment,
+            //     createdAt: review.createdAt,
+            //     updatedAt: review.updatedAt,
+            //     })),
+            // };
 
-            return result;
+            return reviews;
         } catch(error) {
             throw error;
         }
