@@ -5,11 +5,13 @@ import routers  from './router/index';
 import api from './api';
 import { dbConfig } from './database/config';
 import { errorHandler } from './middleware';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 env.config();
 console.log(process.env.REDIS_URL);
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json())
 const PORT = process.env.PORT || 3000;
