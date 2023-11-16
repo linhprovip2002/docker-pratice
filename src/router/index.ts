@@ -8,6 +8,7 @@ import { categoryRouter } from './category';
 import { supplierRouter } from './supplier';
 import { discountRouter } from './discount';
 import { stockRouter } from './stock';
+import { roleRouter } from './role';
 
 const router = express.Router();
 
@@ -19,5 +20,6 @@ router.use('/category', categoryRouter);
 router.use('/supplier', verify, supplierRouter);
 router.use('/discount',verify, discountRouter);
 router.use('/stocks',verify, stockRouter);
+router.use('/role',verify, roleRouter);
 
 export default router;
