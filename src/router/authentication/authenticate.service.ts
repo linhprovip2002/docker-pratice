@@ -19,12 +19,10 @@ class AuthenticationService {
             });
             await account.save();
             const roleUser = await Role.findOne({ roleName: "User",deleted: false });
-            console.log(roleUser);
             const user = new User({
                 account: account,
                 Roles: roleUser
             });
-            console.log(" day la user " + user);
             await user.save();
             
         } catch (error) {
@@ -40,7 +38,6 @@ class AuthenticationService {
                 throw new Error("Password incorrect");
             }
             const user = await User.findOne({ account: account._id,deleted: false });
-            console.log("hahahahaha" + user);
             const token = signJwt(user,account.email);
             return token;
         }catch(error)

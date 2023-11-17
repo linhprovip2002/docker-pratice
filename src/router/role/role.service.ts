@@ -20,7 +20,7 @@ class roleService {
     }
     async addPermissionForRole(roleID, ids) {
         try {
-            console.log("ahahahha");
+    
             
             const role = await Role.findById({_id:roleID,deleted:false});
             if(!role) throw new Error('Role not found');

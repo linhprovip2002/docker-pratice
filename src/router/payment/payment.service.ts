@@ -50,7 +50,7 @@ class PaymentService {
 
       return payment;
     } catch (error) {
-      console.error('PayPal API Error:', error);
+
       throw error;
     }
   }
@@ -67,10 +67,10 @@ class PaymentService {
         };
         paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
             if (error) {
-                console.log(error.response);
+        
                 throw error;
             } else {
-                console.log(JSON.stringify(payment));
+    
                 return payment;
             }
         });
@@ -84,8 +84,6 @@ class PaymentService {
             if (error) {
                 throw error;
             } else {
-                console.log("List Payments Response");
-                console.log(JSON.stringify(payment));
                 return payment;
             }
         });

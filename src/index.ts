@@ -8,7 +8,6 @@ import { errorHandler } from './middleware';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 env.config();
-console.log(process.env.REDIS_URL);
 
 const app = express();
 app.use(cors());
