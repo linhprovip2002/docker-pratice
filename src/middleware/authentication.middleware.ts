@@ -4,7 +4,6 @@ env.config();
 export async function verify(req, res, next) {
     try {      
       const jwtSecret = process.env.JWT_SECRET;
-  
       if (!jwtSecret) {
         throw new Error(
           'JWT secret is not defined. Please set the JWT_SECRET environment variable.'
@@ -20,7 +19,6 @@ export async function verify(req, res, next) {
       if (token) {
         jwt.verify(token, jwtSecret, (err, decoded) => {
           if (err) {
-            console.log(err);
             next(err);
           } else {
             req.userToken = decoded;
