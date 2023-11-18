@@ -10,12 +10,11 @@ function signJwt(user: any, email: string ) {
     return jwt.sign(
         {
             IDUser: user?._id,
-            name: user.lastName + ' ' + user.firstName,
-            email: email,
+            user: user,
             roles: user.Roles
         },
         jwtSecret,
-        { expiresIn: '1h', algorithm: 'HS256' }
+        { expiresIn: '30d', algorithm: 'HS256' }
     );
 }
 
