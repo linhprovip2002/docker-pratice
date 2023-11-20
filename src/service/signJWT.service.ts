@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 
 function signJwt(user: any, email: string ) {
     const jwtSecret = process.env.JWT_SECRET;
-    console.log(user);
     if (!jwtSecret) {
         throw new Error('JWT secret is not defined. Please set the JWT_SECRET environment variable.');
     }

@@ -90,7 +90,6 @@ class UserController {
     async acceptSellerService(req, res, next) {
         try {
             const { ids } = req.body;
-            console.log(ids);
             
             await userService.acceptSellerService(ids);
             return res.status(200).json({ message: 'Accept seller service successfully' });

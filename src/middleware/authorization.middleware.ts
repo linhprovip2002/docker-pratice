@@ -3,8 +3,6 @@ export default function checkAuthor(permission:string) {
     return async  function (req, res, next )
     {  
         try {
-            console.log("checkAuthor");
-            
             const roles = req.userToken.roles;
             const permissionsIds = await authenticateService.findPermissionByRoles(roles);
             const permissionsTile = await authenticateService.findNamePermissionById(permissionsIds);

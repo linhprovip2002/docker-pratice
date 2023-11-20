@@ -207,5 +207,24 @@ class ProductService {
             throw error;
         }
     }
+    async createProduct(body, userId) {
+        const supplier = await Supplier.findOne({ userID: userId, deleted: false });
+        if (!supplier) {
+            throw new Error('Supplier not found');
+        }
+        const product = new Product({
+            IDSupplier: supplier._id,
+            IDCategory: body.IDCategory,
+            type: body.type,
+            nameProduct: body.nameProduct,
+            pictureLinks: body.pictureLinks,
+            description: body.description,
+            color: body.color,
+            size: body.size,
+            price: body.price,
+            quantity: body.quantity,
+        });
+        await product.save();
+    }
 }
 export default new ProductService();

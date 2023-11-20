@@ -92,6 +92,16 @@ class ProductController {
             next(error);
         }
     }
+    async createProduct(req, res, next) {
+        try {
+            const userId = req.userToken.IDUser;
+            const body = req.body;
+            await productService.createProduct(userId, body);
+            return res.status(200).json({ message: 'Product created successfully' });
+        } catch (error) {
+            next(error);
+        }
+    }
 
 }
 

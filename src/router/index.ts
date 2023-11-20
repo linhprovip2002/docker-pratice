@@ -15,11 +15,11 @@ const router = express.Router();
 router.use('/payment', paymentRouter);
 router.use('/auth', authRouter);
 router.use('/user',verify, userRouter);
-router.use('/products',verify, productRouter);
+router.use('/products', productRouter);
 router.use('/category', categoryRouter);
-router.use('/supplier', verify, supplierRouter);
+router.use('/supplier', supplierRouter);
 router.use('/discount',verify, discountRouter);
-router.use('/stocks',verify, stockRouter);
+router.use('/stocks', stockRouter);
 router.use('/role',verify, roleRouter);
 
 export default router;
