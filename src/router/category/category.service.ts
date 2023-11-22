@@ -31,5 +31,11 @@ class CategoryService {
             throw error;
         }
     }
+    async getCategoryById(id) {
+        const category = await Category.findById(id);
+        console.log(category);
+        
+        return category;
+    }
 }
 export default new CategoryService();

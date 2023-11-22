@@ -10,6 +10,7 @@ const supplierSchema = new mongoose.Schema({
     contactPhone: { type: String, required: true },
     logoImage: { type: String },
     address: { type: String, required: true },
+    status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
 }, { timestamps: true });
 
 

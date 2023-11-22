@@ -23,6 +23,16 @@ class CategoryController {
             next(error);
         }
     }
+    async getCategoryById(req, res, next) {
+        try {
+            const id = req.params.id;
+            const category =await categoryService.getCategoryById(id);
+            return res.status(200).json(category);
+
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new CategoryController();

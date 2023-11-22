@@ -45,7 +45,53 @@ class SupplierController {
             next(error);
         }
     }
-
+    async registerSupplier(req, res, next) {
+        try {
+            const userId = req.userToken.IDUser;
+            await supplierService.registerSupplier(userId, req.body);
+            return res.status(200).json({ message: 'Register supplier successfully' });
+        } catch ( error ) {
+            next(error);
+        }
+    }
+    async acceptSupplier(req, res, next) {
+        try {
+            const { ids } = req.body;
+            await supplierService.acceptSupplier(ids);
+            return res.status(200).json({ message: 'Accept supplier successfully' }); 
+        } catch (error) {
+            next(error);
+        }
+    }
+    async getSellerService(req, res, next) {
+        try {
+            const { page, limit } = req.query;
+            const suppliers = await supplierService.getSellerService(page, limit);
+            return res.status(200).json(suppliers);
+        } catch (error) {
+            next(error);
+        }
+    }
+    async getProducts(req, res, next) {
+        try {
+            const userId  = req.userToken.IDUser;
+            const { page, limit } = req.query;
+            const supplierId = await supplierService.getSupplierIDByUserID(userId);
+            const products = await supplierService.getProducts(supplierId , page, limit);
+            return res.status(200).json(products);
+        } catch (error) {
+            next(error);
+        }
+    }
+    async getSupplierByUserId(req, res, next) {
+        try {
+            const supplierID = req.userToken.IDUser;
+            const supplier = await supplierService.getSupplierByUserId(supplierID);
+            return res.status(200).json(supplier);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new SupplierController();
