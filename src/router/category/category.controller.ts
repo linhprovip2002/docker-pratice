@@ -15,16 +15,18 @@ class CategoryController {
         }
     }
 
-    async getCategorys(req, res, next) {
+    async getCategories(req, res, next) {
         try {
-            const categorys = await categoryService.getCategorys();
-            return res.status(200).json(categorys);
+            const categories = await categoryService.getCategories();
+            return res.status(200).json(categories);
         } catch (error) {
             next(error);
         }
     }
     async getCategoryById(req, res, next) {
         try {
+            console.log("vao day neneee");
+            
             const id = req.params.id;
             const category =await categoryService.getCategoryById(id);
             return res.status(200).json(category);

@@ -34,7 +34,7 @@ class SupplierService {
             page ? page : null;
             limit ? limit : null;
             const skipCount = (page - 1) * limit
-            const suppliers = await Supplier.find({deleted:false}).limit(limit).skip(skipCount);
+            const suppliers = await Supplier.find({deleted:false}).limit(limit).skip(skipCount).populate('userID');
             return suppliers;
         } catch(error) {
             throw error;
@@ -102,7 +102,7 @@ class SupplierService {
 
     async getDetail(id) {
         try {
-            const thesupplier = await Supplier.findById(id).where({deleted: false});
+            const thesupplier = await Supplier.findById(id).where({deleted: false}).populate('userID');
             return thesupplier;
         } catch(error) {
             throw error;
@@ -119,12 +119,12 @@ class SupplierService {
     }
 
     async getSupplierIDByStockID(stockID) {
-        const stock = await Stock.findById(stockID).where({deleted: false});
+        const stock = await Stock.findById(stockID).where({deleted: false}).populate('supplierID').populate('IDProduct');
         if (!stock) {
             throw new Error('Stock not found');
         }
         const getsupplierID = stock.supplierID;
-        const supplier = await Supplier.findById(getsupplierID);
+        const supplier = await Supplier.findById(getsupplierID).where({deleted: false}).populate('userID');
         if (!supplier) {
             throw new Error('Supplier not found');
         }
@@ -179,7 +179,8 @@ class SupplierService {
             page ? page : null;
             limit ? limit : null;
             const skipCount = (page - 1) * limit
-            const suppliers = await Supplier.find({deleted:false, status: 'pending'}).limit(limit).skip(skipCount);
+            const suppliers = await Supplier.find({deleted:false, status: 'pending'}).limit(limit).skip(skipCount)
+            .populate('userID')
             return suppliers;
         } catch(error) {
             throw error;
@@ -189,7 +190,7 @@ class SupplierService {
         page ? page : null;
         limit ? limit : null;
         const skipCount = (page - 1) * limit
-        const products = await Product.find({ supplierID: supplierID, deleted: false }).limit(limit).skip(skipCount);
+        const products = await Product.find({ supplierID: supplierID, deleted: false }).limit(limit).skip(skipCount).populate('IDCategory');
         return products;
     }
     async getSupplierByUserId(supplierID) {

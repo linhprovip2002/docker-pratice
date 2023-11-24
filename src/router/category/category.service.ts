@@ -23,16 +23,27 @@ class CategoryService {
         }
     }
 
-    async getCategorys() {
+    async getCategories() {
         try {
-            const categorys = await Category.find({deleted:false});
-            return categorys ;
-        } catch(error) {
+            const categories = await Category.find({ deleted: false })
+                .populate({
+                    path: 'IDProduct',
+                    match: { deleted: false },
+                    populate: { path: 'IDSupplier' }
+                });
+    
+            return categories;
+        } catch (error) {
             throw error;
         }
     }
     async getCategoryById(id) {
-        const category = await Category.findById(id);
+        const category = await Category.findById({_id:id,deleted:false})
+        .populate({
+            path: 'IDProduct',
+            match: { deleted: false },
+            populate: { path: 'IDSupplier' }
+        });
         console.log(category);
         
         return category;
