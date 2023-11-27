@@ -1,4 +1,4 @@
-import { Order, Payment, Product } from "../../database/models";
+import { Order, Product } from "../../database/models";
 import { statusOrder } from "../../database/models/enum";
 
 class oderService {
@@ -37,8 +37,12 @@ class oderService {
         .populate({ path: 'IDProduct' , populate:{ path:'IDSupplier'}})
         .populate('payment');
    }
-//    async getOderByIdSupplier(userID) {
-//         const 
-//    }
+   async getOderByIdSupplier(userID) {
+        const product = await Product.find({ IDSupplier: userID });
+        const productIDs = product.map((item) => item._id);
+        return await Order.find({ IDProduct: { $in: productIDs } })
+        .populate({ path: 'IDProduct' , populate:{ path:'IDSupplier'}})
+        .populate('payment');  
+   }
 }
 export default new oderService();
