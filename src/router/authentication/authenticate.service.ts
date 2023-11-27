@@ -39,7 +39,7 @@ class AuthenticationService {
             }
             const user = await User.findOne({ account: account._id,deleted: false }).populate({path:'account Roles',select:'email userName roleName'})
             const token = signJwt(user,account.email);
-            return token;
+            return {token,user};
         }catch(error)
         {
             throw error;
