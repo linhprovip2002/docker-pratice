@@ -27,6 +27,8 @@ const orderSchema = new mongoose.Schema({
     },
     ShipAddress: { type: String, required: true },
     ShipPhone: { type: String, required: true },
+    description: { type: String },
+    feedbackSupplier: { type: String },
 }, { timestamps: true });
 
 discountSchema.plugin(mongoose_delete, { overrideMethods: 'all' });

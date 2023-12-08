@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import dbConfig from '../config/db.config';
-import {  Category, Product } from '../models';
+import {  Category } from '../models';
 
 const dataSeed = require('./migrations/category.json');
 

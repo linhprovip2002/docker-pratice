@@ -7,7 +7,7 @@ class oderService {
 //create oder follow supplier 
    async createOrder(orderData, userID) {
       const productIDs = orderData.IDProducts; 
-    //   console.log('productIDs: ' + productIDs);
+      console.log('hahahah- --->' + userID)
 
       for (const productID of productIDs) {
           await Order.create({
@@ -21,13 +21,6 @@ class oderService {
       }
     }
 
-//   async getOderById(id) {
-//         const oder = await Order.findById(id)
-//         .populate({path:'IDProduct',populate:{ path:'IDSupplier IDCategory' select: 'companyName contactEmail contactPhone address logoImage CategoryName '} })
-//         .populate('IDCustomer')
-//         .populate('payment');
-//         return oder;
-//     }
     async getOderById(id) {
         try {
             const order = await Order.findById({ _id: id , deleted: false })
@@ -41,7 +34,6 @@ class oderService {
 
             return order;
         } catch (error) {
-            console.error('Error fetching order by ID:', error);
             throw error;
         }
     }
@@ -57,39 +49,45 @@ class oderService {
         .populate('payment');
    }
    async getOderByIdSupplier(userID) {
-        const supplier:any = await Supplier.find({ IDuser: userID , deleted: false});
-        const product = await Product.find({ IDSupplier: supplier._id , deleted: false});
-        console.log('product ------>' + product);
         
+        const supplier:any = await Supplier.findOne({ userID: userID , deleted: false});
+        console.log('supplier ------>' + supplier);
+        const product = await Product.find({ IDSupplier: supplier._id , deleted: false});   
         const productIDs = product.map((item) => item._id);
-        return await Order.find({ IDProduct: { $in: productIDs } })
+        return await Order.find({ IDProduct: { $in: productIDs } , deleted: false })
         .populate({ path: 'IDProduct' , populate:{ path:'IDSupplier'}})
         .populate('payment');  
    }
+   async checkOwner(userId, oderId) {
+        const order:any = await Order.findById({_id:oderId, deleted: false});
+        // find product
+        const product: any = await Product.findOne({ _id: order.IDProduct, deleted: false });
+        // find supplier 
+        const supplier: any = await Supplier.findOne({ _id: product.IDSupplier , deleted: false});
+        if (order.IDCustomer !== userId || supplier.userID !== userId ) {
+            return false;
+        }
+        return true;
+   }
    async deleteOder(id, userID) {
         const order:any = await Order.findById({_id:id, deleted: false});
-        if (order.IDCustomer !== userID && order.IDProduct.IDSupplier !== userID) {
-            console.log("loi roi");
-            
+        console.log('order: ' + order);
+        
+        if(await this.checkOwner(userID, order._id)) {
             throw new Error('Order Access denied');
         }
         console.log('aaaaaaaaaaaa' + order);
         
         await order.delete();
+        // return;
    }
-   async updateOder(id, body, userID) {
-        const order:any = await Order.findById(id);
-        if (order.IDCustomer !== userID && order.IDProduct.IDSupplier !== userID) {
+   async updateOrder(id, body, userID) {
+        const order:any = await Order.findById({_id:id, deleted: false});
+        if(await this.checkOwner(userID, order._id)) {
             throw new Error('Order Access denied');
         }
-        const orderUpdates = {};
-        for (const key of ['statusOrder']) {
-            if (body[key]) {
-                orderUpdates[key] = body[key];
-            }
-        }
-        order.set(orderUpdates);
-        await order.save();
+        // return ;
+        await Order.updateOne({_id:id},{$set:body})
    }
 
 }

@@ -6,8 +6,10 @@ class oderController {
         async createOder(req, res, next) {
             try {
                 const { body } = req;
-                const userID = req.userToken.IDuser;
-                console.log("userID: " + userID);
+                console.log("body: " + body);
+                
+                const userID = req.userToken.IDUser;
+                console.log("userID: " + userID );
                 
                 await orderService.createOrder(body,userID);
                 return res.status(200).json({ message: 'Create order successfully' });
@@ -38,7 +40,7 @@ class oderController {
             try {
                 console.log("ngu vai ca cuc");
                 
-                const userID = req.userToken.IDuser;
+                const userID = req.userToken.IDUser;
                 const oder = await orderService.getOderByUserId(userID);
                 return res.status(200).json(oder);
             } catch (error) {
@@ -47,7 +49,7 @@ class oderController {
         }
         async getOderByIdSupplier(req, res, next) {
             try {
-                const userID = req.userToken.IDuser;
+                const userID = req.userToken.IDUser;
                 const oderList = await orderService.getOderByIdSupplier(userID);
                 return res.status(200).json(oderList);
             } catch (error) {
@@ -58,19 +60,21 @@ class oderController {
             try {
                 console.log("here is deleteOder");
                 const { id } = req.params;
-                const userID = req.userToken.IDuser;
+                const userID = req.userToken.IDUser;
+                console.log("userID: " + id);
+                
                 await orderService.deleteOder(id,userID);
                 return res.status(200).json({ message: 'Delete order successfully' });
             } catch (error) {
                 next(error);
             }
         }
-        async updateOder(req, res, next) {
+        async updateOrder(req, res, next) {
             try {
                 const { id } = req.params;
                 const { body } = req;
-                const userID = req.userToken.IDuser;
-                await orderService.updateOder(id, body,userID );
+                const userID = req.userToken.IDUser;
+                await orderService.updateOrder(id, body,userID );
                 return res.status(200).json({ message: 'Update order successfully' });
             } catch (error) {
                 next(error);
