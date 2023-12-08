@@ -52,7 +52,7 @@ class ProductService {
             page ? page : null;
             limit ? limit : null;
             const skipCount = (page - 1) * limit
-            const products = await Product.find({deleted:false}).limit(limit).skip(skipCount).populate({path:'IDSupplier',select:'companyName description logoImage address'}).populate({path:'IDCategory',select:'CategoryName'});
+            const products = await Product.find({deleted:false}).limit(limit).skip(skipCount).populate({path:'IDSupplier',select:'companyName description logoImage address contactPhone contactEmail'}).populate({path:'IDCategory',select:'CategoryName'});
             return products;
         } catch(error) {
             throw error;
@@ -61,7 +61,7 @@ class ProductService {
 
     async getOneProduct(id) {
         try {
-            const product = await Product.findById(id).where({deleted: false});
+            const product = await Product.findById(id).where({deleted: false}).populate({path:'IDSupplier',select:'companyName description logoImage address contactPhone contactEmail'}).populate({path:'IDCategory',select:'CategoryName'});
             return product;
         } catch(error) {
             throw error;

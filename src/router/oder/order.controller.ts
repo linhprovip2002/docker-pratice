@@ -1,4 +1,3 @@
-// import { oder } from "../../database/models";
 import { orderService } from "./index";
 
 class oderController {
@@ -7,8 +6,11 @@ class oderController {
         async createOder(req, res, next) {
             try {
                 const { body } = req;
-                const oder = await orderService.createOrder(body);
-                return res.status(200).json({ data: oder });
+                const userID = req.userToken.IDuser;
+                console.log("userID: " + userID);
+                
+                await orderService.createOrder(body,userID);
+                return res.status(200).json({ message: 'Create order successfully' });
             } catch (error) {
                 next(error);
             }
@@ -17,7 +19,7 @@ class oderController {
             try {
                 const { id } = req.params;
                 const oder = await orderService.getOderById(id);
-                return res.status(200).json({ data: oder });
+                return res.status(200).json(oder);
             } catch (error) {
                 next(error);
             }
@@ -27,16 +29,18 @@ class oderController {
             try {
                 const { id } = req.params;
                 const oder = await orderService.payment(id);
-                return res.status(200).json({ data: oder });
+                return res.status(200).json(oder);
             } catch (error) {
                 next(error);
             }
         }
         async getOderByUserId(req, res, next) {
             try {
+                console.log("ngu vai ca cuc");
+                
                 const userID = req.userToken.IDuser;
                 const oder = await orderService.getOderByUserId(userID);
-                return res.status(200).json({ data: oder });
+                return res.status(200).json(oder);
             } catch (error) {
                 next(error);
             }
@@ -45,12 +49,33 @@ class oderController {
             try {
                 const userID = req.userToken.IDuser;
                 const oderList = await orderService.getOderByIdSupplier(userID);
-                return res.status(200).json({ data: oderList });
+                return res.status(200).json(oderList);
             } catch (error) {
                 next(error);
             }
         }
-
+        async deleteOder(req, res, next) {
+            try {
+                console.log("here is deleteOder");
+                const { id } = req.params;
+                const userID = req.userToken.IDuser;
+                await orderService.deleteOder(id,userID);
+                return res.status(200).json({ message: 'Delete order successfully' });
+            } catch (error) {
+                next(error);
+            }
+        }
+        async updateOder(req, res, next) {
+            try {
+                const { id } = req.params;
+                const { body } = req;
+                const userID = req.userToken.IDuser;
+                await orderService.updateOder(id, body,userID );
+                return res.status(200).json({ message: 'Update order successfully' });
+            } catch (error) {
+                next(error);
+            }
+        }
 }
 
 export default new oderController();

@@ -20,7 +20,7 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    statusOder: {
+    statusOrder: {
         type: String,
         required: true,
         enum: Object.values(statusOrder), // Use Object.values to get the enum values
