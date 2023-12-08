@@ -6,7 +6,8 @@ class oderService {
     }
 //create oder follow supplier 
    async createOrder(orderData, userID) {
-      const productIDs = orderData.IDProducts;
+      const productIDs = orderData.IDProducts; 
+    //   console.log('productIDs: ' + productIDs);
 
       for (const productID of productIDs) {
           await Order.create({

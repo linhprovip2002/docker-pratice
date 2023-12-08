@@ -3,6 +3,7 @@
     "start": "ts-node src/index.ts",
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
+    "start:nodemon": "./node_modules/nodemon/bin/nodemon.js",
     "lint": "eslint --ext .ts .",
     "seed": "ts-node src/database/seeders/seed.ts",
     "seedUser": "ts-node src/database/seeders/seedAdmin.ts",
@@ -28,6 +29,7 @@
     "mongoose-delete": "^1.0.1",
     "mongoose-slug-generator": "^1.0.4",
     "nodemailer": "^6.9.5",
+    "nodemon": "^3.0.2",
     "paypal-rest-sdk": "^1.8.1"
   }
 }
