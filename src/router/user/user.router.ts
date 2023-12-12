@@ -3,7 +3,7 @@ import { userController } from './index';
 import { checkAuthor } from '../../middleware';
 const router = express.Router();
 
-router.post('/:id/role',checkAuthor('Authorization') , userController.addRoleForUser);
+router.post('/:id/role',checkAuthor(['Authorization']) , userController.addRoleForUser);
 
 router.get('/me', userController.getInforMe);
 
@@ -13,10 +13,10 @@ router.get('/me', userController.getInforMe);
 // router.get('/list-request',checkAuthor('Authorization'), userController.getSellerService);
 
 // router.get('/role' ,checkAuthor('Authorization'), userController.getRoles);
-router.get('/',checkAuthor('read user') , userController.getUsers);
-router.get('/:id',checkAuthor('read user') , userController.getUserById);
-router.put('/:id',checkAuthor('update user'), userController.updateUser);
-router.delete('/:id',checkAuthor('delete user'), userController.deleteUser);
+router.get('/',checkAuthor(['read user']) , userController.getUsers);
+router.get('/:id',checkAuthor(['read user']) , userController.getUserById);
+router.put('/:id',checkAuthor(['update user']), userController.updateUser);
+router.delete('/:id',checkAuthor(['delete user']), userController.deleteUser);
 
 
 // authorization with super admin

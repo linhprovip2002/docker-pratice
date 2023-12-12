@@ -1,28 +1,57 @@
 import { paymentConfig } from '../../database/config';
+import { Order } from '../../database/models';
 import paypal from 'paypal-rest-sdk';
+import { statusOrder } from '../../database/models/enum';
 
 class PaymentService {
 
-  async createPayment(name, price, sku, currency, quantity) {
+  async checkOrderAccepted(id) {
     try {
+      const order = await Order.findById({ _id: id, deleted: false });
+
+      if (!order) {
+        throw new Error('Order not found');
+      }
+
+      if (order.statusOrder === statusOrder.ACCEPTED) {
+        return true;
+      }
+
+      if (order.statusOrder === statusOrder.PAYMENT_SUCCESS) {
+        throw new Error('Order already paid');
+      }
+
+      throw new Error('Order not accepted');
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createPayment(name, price, orderId) {
+    try {
+      if (!(await this.checkOrderAccepted(orderId))) {
+        return false;
+      }
+
+      const currency = 'USD';
+      const quantity = 1;
       await paypal.configure(paymentConfig);
 
       const item = {
         name,
-        sku,
         price,
         currency,
         quantity,
       };
-      let total = (price * quantity).toFixed(2);
+
       const create_payment_json = {
         intent: 'sale',
         payer: {
           payment_method: 'paypal',
         },
         redirect_urls: {
-          return_url: 'http://localhost:3000/api/payment/confirm/success?total='+total,
-          cancel_url: 'http://localhost:3000/payment/confirm/cancel',
+          return_url: `http://localhost:3000/api/payment/confirm/success?total=${price}&orderId=${orderId}`,
+          cancel_url: `http://localhost:3000/api/payment/confirm/cancel?orderId=${orderId}`,
         },
         transactions: [
           {
@@ -31,9 +60,9 @@ class PaymentService {
             },
             amount: {
               currency,
-              total: total, // Calculate the total amount dynamically
+              total: price.toString(),
             },
-            description: 'Hat for the best team ever',
+            description: `Payment for ${name}`,
           },
         ],
       };
@@ -50,7 +79,6 @@ class PaymentService {
 
       return payment;
     } catch (error) {
-
       throw error;
     }
   }
@@ -88,7 +116,24 @@ class PaymentService {
             }
         });
     }
-
+    async updateOder(oderId) {  
+        await Order.findByIdAndUpdate(
+            { _id: oderId},
+            {
+                statusOrder: statusOrder.PAYMENT_SUCCESS,
+            },
+            { new: true }
+        );
+    }
+    async cancelPayment(oderId) {
+      return await Order.findByIdAndUpdate(
+          { _id: oderId},
+          {
+              statusOrder: statusOrder.PAYMENT_FAIL,
+          },
+          { new: true }
+      );
+    }
 }
 
 export default new PaymentService();

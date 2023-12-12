@@ -71,7 +71,7 @@ class oderController {
         }
         async updateOrder(req, res, next) {
             try {
-                const { id } = req.params;
+                const  { id }  = req.params;
                 const { body } = req;
                 const userID = req.userToken.IDUser;
                 await orderService.updateOrder(id, body,userID );

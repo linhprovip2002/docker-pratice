@@ -15,8 +15,10 @@ class oderService {
               IDCustomer: userID,
               orderDate: new Date(),
               statusOrder: statusOrder.PENDING,
+              total: orderData.total,
               ShipAddress: orderData.ShipAddress,
               ShipPhone: orderData.ShipPhone,
+              description: orderData.description
           });
       }
     }
@@ -49,14 +51,26 @@ class oderService {
         .populate('payment');
    }
    async getOderByIdSupplier(userID) {
-        
         const supplier:any = await Supplier.findOne({ userID: userID , deleted: false});
+        if(!supplier) {
+            throw new Error('Supplier not found');
+        }
         console.log('supplier ------>' + supplier);
         const product = await Product.find({ IDSupplier: supplier._id , deleted: false});   
         const productIDs = product.map((item) => item._id);
         return await Order.find({ IDProduct: { $in: productIDs } , deleted: false })
         .populate({ path: 'IDProduct' , populate:{ path:'IDSupplier'}})
         .populate('payment');  
+   }
+   async getOrderByIdSupplier(userID) {
+    const supplier:any = await Supplier.findOne({ userID: userID , deleted: false});
+        if(!supplier) {
+            throw new Error('Supplier not found');
+        }
+        console.log('supplier ------>' + supplier);
+        const product = await Product.find({ IDSupplier: supplier._id , deleted: false});   
+        const productIDs = product.map((item) => item._id);
+        return await Order.find({ IDProduct: { $in: productIDs } , deleted: false })
    }
    async checkOwner(userId, oderId) {
         const order:any = await Order.findById({_id:oderId, deleted: false});
@@ -82,13 +96,15 @@ class oderService {
         // return;
    }
    async updateOrder(id, body, userID) {
-        const order:any = await Order.findById({_id:id, deleted: false});
+        console.log('id: ' + id + 'body: ' + body + 'userID: ' + userID);
+        
+        const order:any = await Order.findOne({_id:id, deleted: false});
+        console.log('order: ' + order);
+        
         if(await this.checkOwner(userID, order._id)) {
             throw new Error('Order Access denied');
         }
-        // return ;
-        await Order.updateOne({_id:id},{$set:body})
+        await Order.findOneAndUpdate( {_id:order._id}, {$set:body})
    }
-
 }
 export default new oderService();

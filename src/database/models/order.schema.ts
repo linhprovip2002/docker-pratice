@@ -13,7 +13,7 @@ const discountSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const orderSchema = new mongoose.Schema({
-    IDProduct: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    IDProduct: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
     IDCustomer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     payment: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment' },
     orderDate: {
@@ -26,6 +26,7 @@ const orderSchema = new mongoose.Schema({
         enum: Object.values(statusOrder), // Use Object.values to get the enum values
     },
     ShipAddress: { type: String, required: true },
+    total: { type: Number},
     ShipPhone: { type: String, required: true },
     description: { type: String },
     feedbackSupplier: { type: String },

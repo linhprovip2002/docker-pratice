@@ -5,8 +5,8 @@ import oderController from './order.controller';
 const router = express.Router();
 
 // router supplier
-router.get('/list', verify, oderController.getOderByIdSupplier);
-router.patch('/:id/action', verify, checkAuthor('update supplier') , oderController.updateOrder);
+router.get('/list', verify, checkAuthor(['Supplier','Authorization']), oderController.getOderByIdSupplier);
+router.patch('/:id/action', verify, checkAuthor(['update supplier']) , oderController.updateOrder);
 
 router.post('/', verify, oderController.createOder);
 router.get('/', verify, oderController.getOderByUserId);
