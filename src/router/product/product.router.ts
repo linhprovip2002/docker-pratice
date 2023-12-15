@@ -17,7 +17,7 @@ router.get('/:id/comment', productController.getCommentsByProductId);
 router.patch('/:id/rating',verify, productController.createRating);
 router.post('/:id/comment',verify, productController.createComment);
 
-router.post('/',verify, checkAuthor(['create product']), productController.createProduct);
+router.post('/',verify, productController.createProduct);
 router.get('/', productController.getProducts); 
 router.get('/:id', productController.getOneProduct);
 router.put('/:id',verify, checkAuthor(['update product']), productController.updateProduct);

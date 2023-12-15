@@ -57,6 +57,8 @@ class ProductController {
     }
     async createProduct(req, res, next) {
         try {
+            console.log("----------------");
+            
             const userId = req.userToken.IDUser;
             const body = req.body;
             await productService.createProduct(userId, body);

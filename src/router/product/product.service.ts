@@ -96,11 +96,13 @@ class ProductService {
             throw error;
         }
     }
-    async createProduct(body, userId) {
+    async createProduct(userId, body) {
         const supplier = await Supplier.findOne({ userID: userId, deleted: false });
         if (!supplier) {
             throw new Error('Supplier not found');
         }
+        console.log("----------------------->",supplier)
+        console.log(body);
         const product = new Product({
             IDSupplier: supplier._id,
             IDCategory: body.IDCategory,

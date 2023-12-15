@@ -45,8 +45,7 @@ class AuthenticationController {
     }
     async resetPassword(req, res, next) {
         try {
-            const { tokenResetPassword } = req.params;
-            const { password } = req.body;
+            const { tokenResetPassword, password } = req.body;
             await authenticateService.resetPassword(tokenResetPassword, password);
             return res.status(200).json({message:"Password reset successfully."});
         } catch (error) {
