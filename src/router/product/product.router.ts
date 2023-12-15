@@ -1,5 +1,5 @@
 import express from 'express';
-import { checkAuthor,verify,validatorReview } from '../../middleware';
+import { checkAuthor,verify } from '../../middleware';
 import { productController } from './index';
 
 const router = express.Router();
@@ -8,11 +8,14 @@ const router = express.Router();
 //discount 
 router.get('/:id/discount', productController.getDiscountByProductId);
 
+router.patch('/comments/:commentId/reply', verify,productController.createReply);
+router.patch('/comments/:commentId', verify,productController.updateComment);
+router.delete('/comments/:commentId', verify,productController.deleteComment);
 
 //review
-router.get('/:id/review', productController.getReviewByProductId);
-router.post('/:id/review',verify , checkAuthor(['create review']), validatorReview, productController.createReview);
-router.put('/:id/review',verify, checkAuthor(['update review']), validatorReview, productController.updateReview);
+router.get('/:id/comment', productController.getCommentsByProductId);
+router.patch('/:id/rating',verify, productController.createRating);
+router.post('/:id/comment',verify, productController.createComment);
 
 router.post('/',verify, checkAuthor(['create product']), productController.createProduct);
 router.get('/', productController.getProducts); 
