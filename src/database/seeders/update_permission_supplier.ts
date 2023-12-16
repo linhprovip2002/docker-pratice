@@ -7,7 +7,11 @@ async function updatePermissionForRole(roleId) {
     '6520efabf5fce79b18515cf5',
     '6520efabf5fce79b18515cf6',
     '6520efabf5fce79b18515cf7',
-    '654de84718b77902714302c4'
+    '654de84718b77902714302c4',
+    '6520efabf5fce79b18515ce4',
+    '6520efabf5fce79b18515ce5',
+    '6520efabf5fce79b18515ce6',
+    '6520efabf5fce79b18515ce7'
   ];
 
   // Use findOne to get the document
