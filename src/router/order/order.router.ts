@@ -8,11 +8,11 @@ const router = express.Router();
 router.get('/list', verify, checkAuthor(['Supplier','Authorization']), oderController.getOderByIdSupplier);
 router.patch('/:id/action', verify, checkAuthor(['update supplier']) , oderController.updateOrder);
 
-router.post('/', verify, oderController.createOder);
-router.get('/', verify, oderController.getOderByUserId);
+router.post('/', verify,checkAuthor(['create order']), oderController.createOder);
+router.get('/', verify,checkAuthor(['read order']), oderController.getOderByUserId);
 router.post('/:id/payment', verify, oderController.payment);
-router.delete('/:id', verify, oderController.deleteOder);
-router.patch('/:id', verify, oderController.updateOrder);
+router.delete('/:id', verify,checkAuthor(['update order']), oderController.deleteOder);
+router.patch('/:id', verify,checkAuthor(['delete order']), oderController.updateOrder);
 
 
 export default router;

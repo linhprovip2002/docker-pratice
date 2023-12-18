@@ -10,25 +10,26 @@ import bodyParser from 'body-parser';
 env.config();
 
 const app = express();
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001'
-];
+// const allowedOrigins = [
+//   'http://localhost:3000',
+//   'http://localhost:3001'
+// ];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Check if the request origin is in the list of allowed origins
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  optionSuccessStatus: 200,
-};
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     // Check if the request origin is in the list of allowed origins
+//     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   credentials: true,
+//   optionSuccessStatus: 200,
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json())
 const PORT = process.env.PORT || 3000;

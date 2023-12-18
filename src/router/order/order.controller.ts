@@ -6,10 +6,8 @@ class oderController {
         async createOder(req, res, next) {
             try {
                 const { body } = req;
-                console.log("body: " + body);
                 
                 const userID = req.userToken.IDUser;
-                console.log("userID: " + userID );
                 
                 await orderService.createOrder(body,userID);
                 return res.status(200).json({ message: 'Create order successfully' });
@@ -38,7 +36,6 @@ class oderController {
         }
         async getOderByUserId(req, res, next) {
             try {
-                console.log("ngu vai ca cuc");
                 
                 const userID = req.userToken.IDUser;
                 const oder = await orderService.getOderByUserId(userID);

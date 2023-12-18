@@ -11,16 +11,7 @@ services:
     volumes:
       - ./:/app
     depends_on:
-      - redis
-    networks:
-      - app-network
-  redis:
-    image: redis
-    container_name: redis_test
-    volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
-    ports:
-      - "6379:6379"
+      - mongo
     networks:
       - app-network
 networks:
