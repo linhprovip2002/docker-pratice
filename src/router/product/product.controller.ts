@@ -4,9 +4,11 @@ class ProductController {
     async getProducts(req, res, next) {
         try {
             const { page, limit } = req.query;
-            page ? page : null;
-            limit ? limit : null;
+            page ? page : 1;
+            limit ? limit : 100;
             const products = await productService.getProducts(page, limit);
+            console.log('tong product: ' + products.length);
+            
             return res.status(200).json(products);
         } catch (error) {
             next(error);

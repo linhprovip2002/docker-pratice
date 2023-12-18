@@ -77,7 +77,7 @@ class SupplierController {
             const userId  = req.userToken.IDUser;
             const { page, limit } = req.query;
             const supplierId = await supplierService.getSupplierIDByUserID(userId);
-            const products = await supplierService.getProducts(supplierId , page, limit);
+            const products = await supplierService.getProducts(supplierId._id , page, limit);
             return res.status(200).json(products);
         } catch (error) {
             next(error);

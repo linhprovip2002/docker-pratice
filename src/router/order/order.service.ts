@@ -95,8 +95,6 @@ class oderService {
         // return;
    }
    async updateOrder(id, body, userID) {
-        console.log('id: ' + id + 'body: ' + body + 'userID: ' + userID);
-        
         const order:any = await Order.findOne({_id:id, deleted: false});
         console.log('order: ' + order);
         

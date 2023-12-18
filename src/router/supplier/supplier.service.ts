@@ -111,11 +111,11 @@ class SupplierService {
 
     async getSupplierIDByUserID(userId) {
         const supplier = await Supplier.findOne({ userID: userId });
+    
         if (!supplier) {
             throw new Error('Supplier not found');
         }
-
-        return supplier.IDSupplier;
+        return supplier;
     }
 
     async getSupplierIDByStockID(stockID) {
@@ -190,7 +190,7 @@ class SupplierService {
         page ? page : null;
         limit ? limit : null;
         const skipCount = (page - 1) * limit
-        const products = await Product.find({ supplierID: supplierID, deleted: false }).limit(limit).skip(skipCount).populate('IDCategory');
+        const products = await Product.find({ IDSupplier: supplierID, deleted: false }).limit(limit).skip(skipCount).populate('IDCategory');
         return products;
     }
     async getSupplierByUserId(supplierID) {
