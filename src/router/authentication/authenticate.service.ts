@@ -19,12 +19,10 @@ class AuthenticationService {
             });
             await account.save();
             const roleUser = await Role.findOne({ roleName: "User",deleted: false });
-            console.log(roleUser);
             const user = new User({
                 account: account,
                 Roles: roleUser
             });
-            console.log(" day la user " + user);
             await user.save();
             
         } catch (error) {
@@ -39,10 +37,9 @@ class AuthenticationService {
             {
                 throw new Error("Password incorrect");
             }
-            const user = await User.findOne({ account: account._id,deleted: false });
-            console.log("hahahahaha" + user);
+            const user = await User.findOne({ account: account._id,deleted: false }).populate({path:'account Roles',select:'email userName roleName'})
             const token = signJwt(user,account.email);
-            return token;
+            return {token,user};
         }catch(error)
         {
             throw error;
@@ -60,8 +57,41 @@ class AuthenticationService {
     async forgotPassword(account)
     {
         const htmlTemplate = `
-        <h1>Forgot Password</h1>
-        <p>Click <a href="http://localhost:3000/api/auth/reset-password/${account.passwordResetToken}">here</a> to reset your password</p>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+                body {
+                    font-family: 'Arial', sans-serif;
+                    background-color: #f4f4f4;
+                    color: #333;
+                    margin: 0;
+                    padding: 0;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100vh;
+                }
+        
+                h1 {
+                    color: #007BFF;
+                    margin-bottom: 20px;
+                }
+        
+                h2 {
+                    font-size: 18px;
+                    color: #333;
+                    margin: 0;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Forgot Password</h1>
+            <h2>${account.passwordResetToken}</h2>
+        </body>
+        </html>
         `;
         try {
             mailService.sendMail(account.email, "Forgot Password", "", htmlTemplate);

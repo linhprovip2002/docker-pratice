@@ -5,7 +5,7 @@ import { statusOrder } from "./enum";
 const discountSchema = new mongoose.Schema({
     IDDiscount: mongoose.Schema.Types.ObjectId,
     IDSupplier: { type: mongoose.Schema.Types.ObjectId, ref: 'Supplier' },
-    IDproduct: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    IDproduct: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
     typeDiscount: { type: String, required: true },
     discount: { type: Number, required: true },
     startDate: { type: Date, required: true },
@@ -20,13 +20,16 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    statusOder: {
+    statusOrder: {
         type: String,
         required: true,
         enum: Object.values(statusOrder), // Use Object.values to get the enum values
     },
     ShipAddress: { type: String, required: true },
+    total: { type: Number},
     ShipPhone: { type: String, required: true },
+    description: { type: String },
+    feedbackSupplier: { type: String },
 }, { timestamps: true });
 
 discountSchema.plugin(mongoose_delete, { overrideMethods: 'all' });

@@ -8,6 +8,12 @@ const productSchema = new mongoose.Schema({
     nameProduct: { type: String, required: true, length: 50 },
     pictureLinks: [{ type: String }],
     description: { type: String, required: true },
+    rate: [
+        {
+            IDcustomer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+            rating: { type: Number, min: 1, max: 5 },
+        }
+    ],
     color: [{ type: String, required: true, length: 20 }],
     size: [{ type: String, required: true, length: 20 }],
     price: { type: Number, required: true },

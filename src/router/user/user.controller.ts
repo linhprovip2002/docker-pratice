@@ -18,10 +18,8 @@ class UserController {
     async updateUser(req, res, next) {
         try {
             const { id } = req.params;
-            console.log("aaaaaaaaaaaaa" + id);
             
             const { body } = req;
-            console.log("aaaaa" + body);
             
             const user = await userService.updateUser(id, body);
             return res.status(200).json({ message: 'User updated successfully' , user });
@@ -32,6 +30,7 @@ class UserController {
     }
     async deleteUser(req, res, next) {
         try {
+            console.log("here is deleteUser");
             const { id } = req.params;
             const user = await userService.deleteUser(id);
             return res.status(200).json({ message: 'User deleted successfully' , user });
@@ -92,7 +91,6 @@ class UserController {
     async acceptSellerService(req, res, next) {
         try {
             const { ids } = req.body;
-            console.log(ids);
             
             await userService.acceptSellerService(ids);
             return res.status(200).json({ message: 'Accept seller service successfully' });

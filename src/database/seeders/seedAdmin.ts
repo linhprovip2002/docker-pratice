@@ -17,7 +17,6 @@ async function seedData() {
             passwordResetToken: crypto.randomBytes(20).toString('hex')
         });
         await account.save();
-        console.log(account._id);
         const roleUser = await Role.findOne({ roleName: "superUser",deleted: false });
         const user = new User({
             account: account,
@@ -27,7 +26,6 @@ async function seedData() {
             gender: userDataSeed.gender
         });
         await user.save();
-        console.log("super created successfully.");
         return;
     } catch (error) {
         throw error;

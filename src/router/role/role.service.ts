@@ -20,15 +20,26 @@ class roleService {
     }
     async addPermissionForRole(roleID, ids) {
         try {
-            console.log("ahahahha");
+    
             
             const role = await Role.findById({_id:roleID,deleted:false});
             if(!role) throw new Error('Role not found');
-            role.IDPermission = [ids];
+            role.IDPermission = ids;
             await role.save();
         } catch (error) {
             throw error;
         }
+    }
+    async removePermissionForRole(roleID, ids) {
+        
+        const role = await Role.findOneAndUpdate(
+            { _id: roleID, deleted: false },
+            {
+                $pull: { IDPermission: { $in: ids } }
+            },
+            { new: true }
+        );
+        if(!role) throw new Error('Role not found');
     }
 }
 export default new roleService();

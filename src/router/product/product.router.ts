@@ -1,21 +1,27 @@
 import express from 'express';
-import { checkAuthor } from '../../middleware';
-import { validatorReview } from '../../middleware/validator.middleware';
+import { checkAuthor,verify } from '../../middleware';
 import { productController } from './index';
 
 const router = express.Router();
 
-router.put('/:id', checkAuthor('update product'), productController.updateProduct);
-router.get('/', productController.getProducts); 
-router.get('/:id', productController.getOneProduct);
-router.delete('/:id', checkAuthor('delete product'), productController.deleteProduct); 
-
-//review
-router.get('/:id/review', productController.getReviewByProductId);
-router.post('/:id/review', checkAuthor('create review'), validatorReview, productController.createReview);
-router.put('/:id/review', checkAuthor('update review'), validatorReview, productController.updateReview);
 
 //discount 
 router.get('/:id/discount', productController.getDiscountByProductId);
 
-export default router;
+router.patch('/comments/:commentId/reply', verify,productController.createReply);
+router.patch('/comments/:commentId', verify,productController.updateComment);
+router.delete('/comments/:commentId', verify,productController.deleteComment);
+
+//review
+router.get('/:id/comment', productController.getCommentsByProductId);
+router.patch('/:id/rating',verify, productController.createRating);
+router.post('/:id/comment',verify, productController.createComment);
+
+router.post('/',verify, productController.createProduct);
+router.get('/', productController.getProducts); 
+router.get('/:id', productController.getOneProduct);
+router.put('/:id',verify, checkAuthor(['update product']), productController.updateProduct);
+router.delete('/:id',verify, checkAuthor(['delete product']), productController.deleteProduct); 
+
+
+export default router;  

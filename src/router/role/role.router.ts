@@ -5,8 +5,9 @@ import { roleController } from './index';
 const router = express.Router();
 
 // role
-router.get('/',checkAuthor('Authorization'), roleController.getRoles);
-router.get('/permission',checkAuthor('Authorization') , roleController.getPermissions);
-router.post('/:id',checkAuthor('Authorization') , roleController.addPermissionForRole);
+router.get('/',checkAuthor(['Authorization']), roleController.getRoles);
+router.get('/permission',checkAuthor(['Authorization']) , roleController.getPermissions);
+router.patch('/:id/add',checkAuthor(['Authorization']) , roleController.addPermissionForRole);
+router.patch('/:id/remove',checkAuthor(['Authorization']) , roleController.removePermissionForRole);
 
 export default router;

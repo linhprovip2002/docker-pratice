@@ -3,9 +3,11 @@
     "start": "ts-node src/index.ts",
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
+    "start:nodemon": "./node_modules/nodemon/bin/nodemon.js",
     "lint": "eslint --ext .ts .",
     "seed": "ts-node src/database/seeders/seed.ts",
     "seedUser": "ts-node src/database/seeders/seedAdmin.ts",
+    "fixture": "ts-node src/database/seeders/update_permission_supplier.ts 654d9fc02e99806f670495f2",
     "seedCategory": "ts-node src/database/seeders/seedCategory.ts"
   },
   "devDependencies": {
@@ -20,6 +22,7 @@
     "@types/express": "^4.17.17",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
@@ -27,6 +30,7 @@
     "mongoose-delete": "^1.0.1",
     "mongoose-slug-generator": "^1.0.4",
     "nodemailer": "^6.9.5",
+    "nodemon": "^3.0.2",
     "paypal-rest-sdk": "^1.8.1"
   }
 }

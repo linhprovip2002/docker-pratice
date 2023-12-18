@@ -58,12 +58,12 @@ class StockController {
         }
     }
 
-    async createProductinStock(req, res, next) {
+    async createProductionStock(req, res, next) {
         try {
             const { id } = req.params; //id Stock
             const userId = req.userToken.IDUser;
             const body = req.body;
-            await stockService.createProductinStock(id, body, userId);
+            await stockService.createProductionStock(id, body, userId);
             return res.status(200).json({ message: 'Product added successfully' });
         } catch (error) {
             next(error);

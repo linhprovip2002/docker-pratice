@@ -9,7 +9,7 @@ class UserService {
             page ? page : null;
             limit ? limit : null;
             const skipCount = (page - 1) * limit
-            const users = await User.find({deleted:false}).limit(limit).skip(skipCount);
+            const users = await User.find({deleted:false}).limit(limit).skip(skipCount).populate({path:'account Roles',select:'userName email roleName'});
             return users;
         } catch(error) {
             throw error;
@@ -57,14 +57,13 @@ class UserService {
         }
     }
     async addRoleForUser(userID, roleId) {
-        try {
-            const user = await User.findById({_id:userID,deleted:false});
-            if(!user) throw new Error('User not found');
-            user.updateOne({Roles:roleId});
-            return true;
-        } catch (error) { 
-            throw error;
-        }
+        const user = await User.findById(userID);
+        if (!user) { throw new Error('User not found'); }
+        if (user.Roles.includes(roleId)) { 
+            return ;
+         }
+        user.Roles.push(roleId);
+        return await user.save();
     }
     async registerSellerService(userId) {
         try {
@@ -123,7 +122,7 @@ class UserService {
         }
     }
     async getUserById(id) {
-        return await User.findById(id);
+        return await User.findById(id).populate({path:'account Roles',select:'userName email roleName'});
     }
 }
 export default new UserService();

@@ -4,8 +4,19 @@ const mongoose_delete = require('mongoose-delete');
 const reviewSchema = new mongoose.Schema({
     IDproduct: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
     IDcustomer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    rating: { type: Number, min: 1, max: 5  },
-    comment: { type: String, },
+    content: { type: String, required: true },
+    reply: [
+        {
+            IDadmin: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+            content: { type: String, required: true },
+        }
+    ],
+    reaction: [
+        {
+            IDcustomer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+            reaction: { type: String, enum: ['like', 'dislike']},
+        }
+    ],
 }, { timestamps: true });  
 
 reviewSchema.plugin(mongoose_delete, { overrideMethods: 'all' });

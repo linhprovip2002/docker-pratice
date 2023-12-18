@@ -97,20 +97,20 @@ class StockService {
         if (!stock) {
             throw new Error('Stock not found');
         }
-        const getsupplierID = stock.supplierID;
-        const supplier = await Supplier.findById(getsupplierID);
+        const getSupplierID = stock.supplierID;
+        const supplier = await Supplier.findById(getSupplierID);
         if (!supplier) {
             throw new Error('Supplier not found');
         }
-        return getsupplierID;
+        return getSupplierID;
     }
 
     async createStock(userId, body) {
         try {
-            const getsupplierID = await this.getSupplierIDByUserID(userId);
+            const getSupplierID = await this.getSupplierIDByUserID(userId);
             const stock = new Stock({
                 IDProduct: body.IDProduct,
-                supplierID: getsupplierID,
+                supplierID: getSupplierID,
                 storageAddress: body.storageAddress,
                 storageName: body.storageName,
                 isActive: true,
@@ -192,7 +192,7 @@ class StockService {
         }
     }
 
-    async createProductinStock(id, body, userId) {
+    async createProductionStock(id, body, userId) {
         try {
             const checkAccess = await this.checkAccessStock(id, userId);
             if (checkAccess == false) throw new Error('Stock Access denied');
@@ -206,12 +206,12 @@ class StockService {
                 throw new Error('Supplier not found');
             }
             
-            const getcategory = await Category.findById(body.IDCategory);
+            const getCateGory = await Category.findById(body.IDCategory);
 
-            if (!getcategory) {
+            if (!getCateGory) {
                 throw new Error('Category not found');
             }
-            const categoryID = getcategory._id;
+            const categoryID = getCateGory._id;
             const product = new Product({
                 IDSupplier: supplierID,
                 IDCategory: categoryID,
@@ -227,10 +227,10 @@ class StockService {
             
             await product.save();
 
-            getcategory.IDProduct.push(product._id);
+            getCateGory.IDProduct.push(product._id);
             stock.IDProduct.push(product._id);
             
-            await getcategory.save();
+            await getCateGory.save();
             await stock.save();
         } catch(error) {
             throw error;

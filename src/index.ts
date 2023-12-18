@@ -5,11 +5,30 @@ import routers  from './router/index';
 import api from './api';
 import { dbConfig } from './database/config';
 import { errorHandler } from './middleware';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 env.config();
-console.log(process.env.REDIS_URL);
 
 const app = express();
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001'
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Check if the request origin is in the list of allowed origins
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(bodyParser.json())
 const PORT = process.env.PORT || 3000;
