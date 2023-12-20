@@ -117,90 +117,45 @@ class ProductService {
         });
         await product.save();
     }
-    async createRating(userId, id, body) {
-        try {
-            const product:any = await Product.findOne({ _id: id, deleted: false }).exec();
-    
-            if (!product) {
-                throw new Error('Product not found');
-            }
-    
-            product.rate = {
-                IDcustomer: userId,
-                rating: body.rating,
-            };
-            return await product.save();
-        } catch (error) {
-            console.log(error);
+    async createReview(id, userId, body) {
+        if (await this.isReviewed(id, userId)) {
+            throw new Error('User has already reviewed this product');
         }
+    
+        const review = new Review({
+            IDproduct: id,
+            IDcustomer: userId,
+            rating: body.rating,
+            comment: body.comment,
+        });
+    
+        return await review.save();
     }
-    async createComment(userId, id, body) {
-        try {
-            const product = await Product.findOne({ _id: id, deleted: false }).exec();
-    
-            if (!product) {
-                throw new Error('Product not found');
-            }
-    
-            const comment = await Review.create({
-                IDproduct: id,
-                IDcustomer: userId,
-                content: body.content,
-            });
-    
-            return comment;
-        } catch (error) {
-            console.error(error);
-            // You may want to handle the error differently, e.g., return an error response.
-            throw new Error('Failed to create comment');
-        }
-    }
-    async createReply(userId, commentId, body) {
-        try {
-            const comment = await Review.findOneAndUpdate({ _id: commentId, deleted: false }, {
-                $push: {
-                    reply: {
-                        userId: userId,
-                        content: body.content,
-                    },
-                },
-            }, { new: true }).exec();
 
-            return comment;
-        } catch (error) {
-            throw new Error('Failed to create reply');
-        }
-        
+    async isReviewed(productId, userId) {
+        const review = await Review.findOne({ IDproduct: productId, IDcustomer: userId, deleted: false });
+        return !!review; 
     }
-    async getCommentsByProductId(id) {
-        try {
-            const comments = await Review.find({ IDproduct: id, deleted: false }).populate({path:'IDcustomer', select:'firstName lastBane profilePicture'}).populate({path:'reply.IDadmin',select: {path:'IDcustomer', select:'firstName lastBane profilePicture'}});
-            return comments;
-        } catch (error) {
-            console.log(error);
-            
-            throw new Error('Failed to get comments');
-        }
+    async readReview(id){
+        const reviews = Review.find({ IDproduct: id, deleted: false }).populate({ path: 'IDcustomer' , select: 'profilePicture firstName lastName' })
+        return reviews;
     }
-    async updateComment(userId, commentId, body) {
-        const comment: any = await Review.findById(commentId);
-            console.log(comment.userId != userId);
-            if( comment.IDcustomer === userId || userId === '65222936f112a74c76427635' )
-            {
-                  return Review.updateOne({_id:commentId},{$set:{content:body.content}});
-            } else {
-                  throw new Error('User is not owner comment');
-            }
+    async updateReview(id, userId, body) {
+        const hasAccess = await this.hasAccessReview(id, userId);
+        if (!hasAccess) {
+            throw new Error('You are not the owner of this review or the review does not exist');
         }
-    async deleteComment(userId, commentId) {
-        const comment: any = await Review.findById(commentId);
-
-            if( comment.IDcustomer === userId || userId === '65222936f112a74c76427635' )
-            {
-                  return Review.updateOne({_id:commentId},{$set:{deleted:true}});
-            } else {
-                  throw new Error('User is not owner comment');
-            }
-    }    
+    
+        return await Review.findByIdAndUpdate(
+            id,
+            { $set: { rating: body.rating, comment: body.comment } },
+            { new: true } 
+        );
+    }
+    
+    async hasAccessReview(id, userId) {
+        const review = await Review.findOne({ _id: id, IDcustomer: userId, deleted: false });
+        return !!review; 
+    }
 }
 export default new ProductService();

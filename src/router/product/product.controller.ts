@@ -69,69 +69,40 @@ class ProductController {
             next(error);
         }
     }
-    async createRating(req, res, next) {
+    async createReview(req, res, next) {
         try {
             const userId = req.userToken.IDUser;
-            const { id } = req.params;
             const body = req.body;
-            console.log(userId, id, body);
-            await productService.createRating(userId, id, body);
-            return res.status(200).json({ message: 'Rating created successfully' });
+            const { id } = req.params 
+            const review  = await productService.createReview(id, userId, body);
+            return res.status(200).json(review);
         } catch (error) {
             next(error);
         }
     }
-    async createComment(req, res, next) {
+    async readReview( req , res , next ) {
         try {
-            const userId = req.userToken.IDUser;
-            const { id } = req.params;
-            const body = req.body;
-            const comment = await productService.createComment(userId, id, body);
-            return res.status(200).json(comment);
+            const { id } = req.params 
+            const review  = await productService.readReview(id);
+            return res.status(200).json(review)
         } catch (error) {
-            next(error);
+            next(error)
         }
     }
-    async createReply(req, res, next) {
-        try {
-            const userId = req.userToken.IDUser;
-            const { commentId } = req.params;
-            const body = req.body;
-            const comment = await productService.createReply(userId, commentId, body);
-            return res.status(200).json(comment);
-        } catch (error) {
-            next(error);
-        }
+    async updateReview(req , res , next ) {
+       try {
+        const userId = req.userToken.IDUser;
+        console.log(userId)
+        const body = req.body;
+        const { id } = req.params;
+        const review  = await productService.updateReview(id, userId, body);
+        return res.status(200).json(review);
+       } catch (error) {
+        next(error)
+       }
     }
-    async getCommentsByProductId(req, res, next) {
-        try {
-            const { id } = req.params;
-            const comments = await productService.getCommentsByProductId(id);
-            return res.status(200).json(comments);
-        } catch (error) {
-            next(error);
-        }
-    }
-    async updateComment(req, res, next) {
-        try {
-            const { commentId } = req.params;
-            const userId = req.userToken.IDUser;
-            await productService.updateComment( userId, commentId, req.body);
-            return res.status(200).json({ message: 'Comment updated successfully' });
-            
-        } catch (error) {
-            next(error);
-        }
-    }
-    async deleteComment(req, res, next) {
-        try {
-            const { commentId } = req.params;
-            const userId = req.userToken.IDUser; 
-            await productService.deleteComment(userId, commentId);
-            return res.status(200).json({ message: 'Comment deleted successfully' });
-        } catch (error) {
-            next(error);
-        }
+    async deleteReview() {
+        
     }
 }
 

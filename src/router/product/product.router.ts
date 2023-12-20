@@ -8,14 +8,19 @@ const router = express.Router();
 //discount 
 router.get('/:id/discount', productController.getDiscountByProductId);
 
-router.patch('/comments/:commentId/reply', verify,productController.createReply);
-router.patch('/comments/:commentId', verify,productController.updateComment);
-router.delete('/comments/:commentId', verify,productController.deleteComment);
+// router.patch('/comments/:commentId/reply', verify,productController.createReply);
+// router.patch('/comments/:commentId', verify,productController.updateComment);
+// router.delete('/comments/:commentId', verify,productController.deleteComment);
 
-//review
-router.get('/:id/comment', productController.getCommentsByProductId);
-router.patch('/:id/rating',verify, productController.createRating);
-router.post('/:id/comment',verify, productController.createComment);
+// //review
+// router.get('/:id/comment', productController.getCommentsByProductId);
+// router.patch('/:id/rating',verify, productController.createRating);
+// router.post('/:id/comment',verify, productController.createComment);
+router.patch('/review/:id',verify, productController.updateReview);
+router.delete('/review/:id',verify, productController.deleteReview);
+router.post('/:id/review',verify, productController.createReview);
+router.get('/:id/review', productController.readReview)
+
 
 router.post('/',verify, productController.createProduct);
 router.get('/', productController.getProducts); 
