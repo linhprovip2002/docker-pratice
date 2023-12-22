@@ -40,9 +40,18 @@ class SupplierService {
             throw error;
         }
     }
+    async checkHasSupplier(userId) {
+            const supplier = await Supplier.findOne({ userID: userId });
+            if (!supplier) {
+                return false;
+            }
+            return true;
+    }
 
     async createSupplier(userId, body) {
-        try {
+            if (await this.checkHasSupplier(userId)) {
+                return new Error('Supplier already exists');
+            }
             const supplier = new Supplier({
                 companyName: body.companyName,
                 description: body.description,
@@ -64,13 +73,8 @@ class SupplierService {
             // });
         
             // // Save supplier and stock
-            await supplier.save();
-            // await stock.save();
-        } catch(error) {
-            throw error;
+            return await supplier.save();
         }
-    }
-
     async updateSupplier(id, body, userId) {
         try {
             const checkAccess = await this.checkAccessSupplier(id, userId);
@@ -135,6 +139,9 @@ class SupplierService {
             if (supplierExist && supplierExist.length > 0) {
                 throw new Error('Company name already exists');
             }
+            if (await this.checkHasSupplier(userId)) {
+                throw new Error('Supplier already exists');
+            }
             const supplier = new Supplier({
                 companyName: body.companyName,
                 description: body.description,
@@ -166,11 +173,8 @@ class SupplierService {
         }
 
         for (const user of users) {
-            console.log("vao day roi");
             await userService.addRoleForUser(user._id, '654d9fc02e99806f670495f2');
         }
-
-        // Uncomment the line below if you want to update the status of suppliers
         return await Supplier.updateMany({ _id: { $in: ids } }, { status: 'accepted' });
    
     }
@@ -179,7 +183,7 @@ class SupplierService {
             page ? page : null;
             limit ? limit : null;
             const skipCount = (page - 1) * limit
-            const suppliers = await Supplier.find({deleted:false, status: 'pending'}).limit(limit).skip(skipCount)
+            const suppliers = await Supplier.find({deleted:false }).limit(limit).skip(skipCount)
             .populate('userID')
             return suppliers;
         } catch(error) {
@@ -194,7 +198,7 @@ class SupplierService {
         return products;
     }
     async getSupplierByUserId(supplierID) {
-        const supplier = await Supplier.findOne({ userID: supplierID });
+        const supplier = await Supplier.findOne({ userID: supplierID }).populate('userID');
         if (!supplier) {
             throw new Error('Supplier not found');
         }

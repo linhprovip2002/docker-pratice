@@ -16,6 +16,14 @@ const userSchema = new mongoose.Schema({
     profilePicture: { type: String },
     isActive: { type: String , enum: statusUser , default: statusUser.ACTIVE }
 }, { timestamps: true });
+userSchema.pre('save', function (next) {
+    const currentDate = new Date();
+    if (this.dayOfBirth && this.dayOfBirth >= currentDate) {
+        // Birthday is in the future, so throw an error
+        return next(new Error('Birthday must be in the past.'));
+    }
+    next();
+});
 
 userSchema.plugin(mongoose_delete , { overrideMethods: 'all',   deletedAt : true });
 

@@ -97,7 +97,7 @@ class ProductService {
         }
     }
     async createProduct(userId, body) {
-        const supplier = await Supplier.findOne({ userID: userId, deleted: false });
+        const supplier = await Supplier.findOne({ userID: userId, deleted: false, status: 'accepted' });
         if (!supplier) {
             throw new Error('Supplier not found');
         }

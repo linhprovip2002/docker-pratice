@@ -5,8 +5,11 @@ class SupplierController {
         try {
             const userId = req.userToken.IDUser;
             const body = req.body;
-            await supplierService.createSupplier(userId, body);
-            return res.status(200).json({ message: 'Supplier added successfully' });
+            const supplier = await supplierService.createSupplier(userId, body);
+            if (supplier instanceof Error) {
+                throw new Error(supplier.message);
+            }
+            return res.status(200).json(supplier);
         } catch (error) {
             next(error);
         }
@@ -48,8 +51,11 @@ class SupplierController {
     async registerSupplier(req, res, next) {
         try {
             const userId = req.userToken.IDUser;
-            await supplierService.registerSupplier(userId, req.body);
-            return res.status(200).json({ message: 'Register supplier successfully' });
+            const supplier:any = await supplierService.registerSupplier(userId, req.body);
+            if (supplier instanceof Error) {
+                throw new Error(supplier.message);
+            }
+            return res.status(200).json(supplier);
         } catch ( error ) {
             next(error);
         }
