@@ -23,7 +23,7 @@ class roleService {
             const role = await Role.findOneAndUpdate(
                 { _id: roleID, deleted: false },
                 {
-                    $addToSet: { IDPermission: { $each: ids } }
+                    $set: { IDPermission:ids }
                 },
                 { new: true }
             );
