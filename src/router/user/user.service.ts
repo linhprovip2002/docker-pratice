@@ -56,14 +56,8 @@ class UserService {
             throw error;
         }
     }
-    async addRoleForUser(userID, roleId) {
-        const user = await User.findById(userID);
-        if (!user) { throw new Error('User not found'); }
-        if (user.Roles.includes(roleId)) { 
-            return ;
-         }
-        user.Roles.push(roleId);
-        return await user.save();
+    async addRoleForUser(userID, roleIds) {
+        return await User.updateOne({ _id: userID }, { $set: { Roles: roleIds } });
     }
     async registerSellerService(userId) {
         try {

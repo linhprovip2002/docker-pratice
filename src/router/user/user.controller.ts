@@ -71,8 +71,15 @@ class UserController {
     async addRoleForUser(req, res, next) {
         try {
             const userID = req.params.id;
-            const roleId = req.body.roleId;
-            await userService.addRoleForUser(userID, roleId);
+            const roleIds = req.body.roleIds;
+            if ( !roleIds || roleIds.length === 0 ) {
+                await userService.addRoleForUser(userID, []);
+                return res.status(200).json({ message: 'Role removed successfully' });
+            }
+            const result = await userService.addRoleForUser(userID, roleIds);
+            if( result instanceof  Error ) {
+                return res.status(400).json({ message: result.message });
+            }
             return res.status(200).json({ message: 'Role added successfully' });
         } catch (error) {
             next(error);   

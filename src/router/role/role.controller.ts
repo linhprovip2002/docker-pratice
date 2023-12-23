@@ -27,7 +27,9 @@ class roleController {
         try {
             const roleID = req.params.id;
             const { ids } = req.body;
-            
+            if(ids.length ===0 ) {
+                await roleService.addPermissionForRole(roleID, []);
+            }
             await roleService.addPermissionForRole(roleID, ids);
             return res.status(200).json({ message: 'Permission added successfully' });
         } catch (error) {
