@@ -11,6 +11,7 @@ router.patch('/:id/action', verify, checkAuthor(['update supplier']) , oderContr
 router.post('/', verify,checkAuthor(['create order']), oderController.createOder);
 router.get('/', verify,checkAuthor(['read order']), oderController.getOderByUserId);
 router.post('/:id/payment', verify, oderController.payment);
+router.get('/:id',verify, checkAuthor(['read order']) , oderController.getOderById);
 router.delete('/:id', verify,checkAuthor(['update order']), oderController.deleteOder);
 router.patch('/:id', verify,checkAuthor(['delete order']), oderController.updateOrder);
 

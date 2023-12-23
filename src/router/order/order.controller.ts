@@ -18,8 +18,8 @@ class oderController {
         async getOderById(req, res, next) {
             try {
                 const { id } = req.params;
-                const oder = await orderService.getOderById(id);
-                return res.status(200).json(oder);
+                const order = await orderService.getOderById(id);
+                return res.status(200).json(order);
             } catch (error) {
                 next(error);
             }
