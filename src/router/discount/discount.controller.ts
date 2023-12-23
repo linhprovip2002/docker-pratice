@@ -5,11 +5,9 @@ class DiscountController {
 
     async createDiscount(req, res, next) {
         try {
-
-            const { idProduct } = req.params;
             const userId = req.userToken.IDUser;
             const body = req.body;
-            await discountService.createDiscount(idProduct, body, userId);
+            await discountService.createDiscount(body, userId);
             return res.status(200).json({ message: 'Discount added successfully' });
         } catch (error) {
             next(error);

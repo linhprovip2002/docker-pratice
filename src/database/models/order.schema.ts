@@ -8,6 +8,7 @@ const discountSchema = new mongoose.Schema({
     IDproduct: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
     typeDiscount: { type: String, required: true },
     discount: { type: Number, required: true },
+    quantity: { type: Number, required: true },
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
 }, { timestamps: true });

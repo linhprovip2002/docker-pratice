@@ -30,32 +30,17 @@ class DiscountService {
         }
     }
 
-    async createDiscount(idProduct, body, userId) {
+    async createDiscount( body, userId) {
         try {
-
-            const checkAccess = await this.checkAccessProduct(idProduct, userId);
-            if (checkAccess == false) throw new Error('Product Access denied');
-
-            const product = await Product.findById(idProduct).where({deleted: false});
-
-            // Nếu đối tượng Product không được tìm thấy, trả về null
-            if (!product) {
-                throw new Error('Product not found');
-            }
-            // Lấy ID Supplier từ đối tượng Product
-            const supplierID = product.IDSupplier;
-
-            // Tạo một đối tượng Discount mới
-            const discount = new Discount({
-            IDSupplier: supplierID,
-            IDproduct: idProduct,
-            typeDiscount: body.typeDiscount,
-            discount: body.discount,
-            startDate: body.startDate,
-            endDate: body.endDate,
+            return await Discount.create({
+                IDSupplier: userId,
+                IDproduct: body.IDproducts,
+                typeDiscount: body.typeDiscount,
+                discount: body.discount,
+                quantity: body.quantity,
+                startDate: body.startDate,
+                endDate: body.endDate,
             });
-            // Lưu đối tượng Discount vào cơ sở dữ liệu
-            await discount.save();
         } catch(error) {
             throw error;
         }

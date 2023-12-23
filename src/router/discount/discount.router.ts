@@ -5,7 +5,7 @@ import { discountController } from './index';
 
 const router = express.Router();
 
-router.post('/addDiscount/:idProduct', checkAuthor(['update product']), validatorDiscount, discountController.createDiscount);
+router.post('/', checkAuthor(['create discount','Authorization']), validatorDiscount, discountController.createDiscount);
 router.put('/:id', checkAuthor(['update product']), validatorDiscount, discountController.updateDiscount); 
 router.delete('/:id', checkAuthor(['update product']), discountController.deleteDiscount);
 
