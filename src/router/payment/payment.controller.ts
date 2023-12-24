@@ -21,7 +21,9 @@ class  PaymentController
             const { paymentId, PayerID, total, orderId } = req.query;
             await paymentService.updateOder(orderId);
             await paymentService.executePayment(paymentId, PayerID,total);
-            return res.status(200).json({ message: "payment success" });
+            console.log('http://localhost:3002/order-complete?orderId' + orderId);
+            const redirectUrl = 'http://localhost:3002/order-complete?orderId=' + orderId + 'status=success';
+            return res.writeHead(301, { Location: redirectUrl }).end();
         } catch (err) {
             next(err);
         }
@@ -30,7 +32,8 @@ class  PaymentController
         try {
             const { orderId } = req.query;
             await paymentService.cancelPayment(orderId);
-            return res.status(200).json({ message: 'Payment cancelled' });
+            const redirectUrl = 'http://localhost:3002/order-complete?orderId=' + orderId + 'status=cancel';
+            return res.writeHead(301, { Location: redirectUrl }).end();
         } catch (err) {
             next(err);
         }
