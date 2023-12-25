@@ -1,4 +1,5 @@
 import paymentConfig from './payment.config';
 import { mailConfig } from './mail.config';
 import dbConfig from './db.config';
-export { paymentConfig, mailConfig, dbConfig};
+import  vnConfig  from './vnpay.config';
+export { paymentConfig, mailConfig, dbConfig, vnConfig};
