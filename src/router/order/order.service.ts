@@ -17,7 +17,8 @@ class oderService {
               total: orderData.total,
               ShipAddress: orderData.ShipAddress,
               ShipPhone: orderData.ShipPhone,
-              description: orderData.description
+              description: orderData.description,
+              feedbackSupplier: orderData.feedbackSupplier,
           });
       }
     }

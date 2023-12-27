@@ -51,7 +51,6 @@ class  PaymentController
     async vnpay(req, res, next){
         try {
             let order_id = req.query.order_id;
-            console.log('------------------order id moi vao ',order_id);
             process.env.TZ = 'Asia/Ho_Chi_Minh';
     
             let date = new Date();
@@ -100,7 +99,9 @@ class  PaymentController
             let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
             vnp_Params['vnp_SecureHash'] = signed;
             vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
-            return res.writeHead(301, { Location: vnpUrl }).end();
+            console.log('------------------vnpUrl ',vnpUrl);
+            // return res.writeHead(301, { Location: vnpUrl }).end();
+            return res.status(200).json({ vnpUrl });
             
         } catch (error) {
             next(error);
@@ -111,11 +112,11 @@ class  PaymentController
             const { order_id , vnp_ResponseCode } = req.query;
             if(vnp_ResponseCode == '00'){
                 await paymentService.updateOder(order_id);
-                const redirectUrl = 'http://localhost:3002/order-complete?orderId=' + order_id + 'status=success';
+                const redirectUrl = 'http://localhost:4000/order-complete?orderId=' + order_id + 'status=success';
                 return res.writeHead(301, { Location: redirectUrl }).end();
             } else {
                 await paymentService.cancelPayment(order_id);
-                const redirectUrl = 'http://localhost:3002/checkout?orderId=' + order_id + 'status=failed';
+                const redirectUrl = 'http://localhost:4000/checkout?orderId=' + order_id + 'status=failed';
                 return res.writeHead(301, { Location: redirectUrl }).end();
             }
         } catch (error) {

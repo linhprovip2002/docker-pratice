@@ -121,6 +121,7 @@ class PaymentService {
             { _id: oderId},
             {
                 statusOrder: statusOrder.PAYMENT_SUCCESS,
+                feedbackSupplier: 'Đơn hàng thanh toán thành công'
             },
             { new: true }
         );
@@ -130,6 +131,7 @@ class PaymentService {
           { _id: oderId},
           {
               statusOrder: statusOrder.PAYMENT_FAIL,
+              feedbackSupplier: 'Đơn hàng thanh toán thất bại'
           },
           { new: true }
       );

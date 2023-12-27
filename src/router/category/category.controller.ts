@@ -24,9 +24,7 @@ class CategoryController {
         }
     }
     async getCategoryById(req, res, next) {
-        try {
-            console.log("vao day neneee");
-            
+        try {            
             const id = req.params.id;
             const category =await categoryService.getCategoryById(id);
             return res.status(200).json(category);

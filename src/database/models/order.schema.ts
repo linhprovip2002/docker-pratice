@@ -27,7 +27,7 @@ const orderSchema = new mongoose.Schema({
         enum: Object.values(statusOrder), // Use Object.values to get the enum values
     },
     ShipAddress: { type: String, required: true },
-    total: { type: Number},
+    total: { type: Number, default: 0 },
     ShipPhone: { type: String, required: true },
     description: { type: String },
     feedbackSupplier: { type: String },
