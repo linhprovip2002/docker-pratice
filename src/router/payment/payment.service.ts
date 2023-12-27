@@ -137,7 +137,6 @@ class PaymentService {
       );
     }
     sortObject(obj) {
-      console.log('------------------',obj);
       let sorted:any = {};
       let str:any = [];
       let key:any;
