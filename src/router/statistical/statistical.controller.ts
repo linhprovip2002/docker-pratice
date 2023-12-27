@@ -5,9 +5,9 @@ class statisticalController {
         try {
              const { id } = req.params;
              // id user
-             const { year, month } = req.query;
+             const { year, month, day } = req.query;
              const userId = req.userToken.IDUser;
-             const result = await statisticalService.getStatistical(id, userId, month, year );
+             const result = await statisticalService.getStatistical(id, userId, month, year, day);
              res.status(200).json(result);
         } catch (error) {
              next(error);
