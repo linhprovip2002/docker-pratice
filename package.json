@@ -7,7 +7,7 @@
     "lint": "eslint --ext .ts .",
     "seed": "ts-node src/database/seeders/seed.ts",
     "seedUser": "ts-node src/database/seeders/seedAdmin.ts",
-    "fixture": "ts-node src/database/seeders/seed_total_order.ts",
+    "fixture": "ts-node src/database/seeders/seed_sold_number.ts",
     "seedCategory": "ts-node src/database/seeders/seedCategory.ts"
   },
   "devDependencies": {

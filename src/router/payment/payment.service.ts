@@ -1,5 +1,5 @@
 import { paymentConfig } from '../../database/config';
-import { Order } from '../../database/models';
+import { Order,Product } from '../../database/models';
 import paypal from 'paypal-rest-sdk';
 import { statusOrder } from '../../database/models/enum';
 
@@ -122,6 +122,17 @@ class PaymentService {
             {
                 statusOrder: statusOrder.PAYMENT_SUCCESS,
                 feedbackSupplier: 'Đơn hàng thanh toán thành công'
+            },
+            { new: true }
+        );
+    }
+    async updateNumberSold(oderId) {
+        const order:any = await Order.findById({ _id: oderId, deleted: false, statusOrder: statusOrder.PAYMENT_SUCCESS });
+        const product:any = await Product.findById({ _id: order.IDProduct, deleted: false });
+        await Product.findByIdAndUpdate(
+            { _id: order.product},
+            {
+              soldNumber: product.numberSold + 1
             },
             { new: true }
         );

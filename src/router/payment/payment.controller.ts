@@ -22,6 +22,7 @@ class  PaymentController
         try {
             const { paymentId, PayerID, total, orderId } = req.query;
             await paymentService.updateOder(orderId);
+            await paymentService.updateNumberSold(orderId);
             await paymentService.executePayment(paymentId, PayerID,total);
             console.log('http://localhost:3002/order-complete?orderId' + orderId);
             const redirectUrl = 'http://localhost:3002/order-complete?orderId=' + orderId + 'status=success';
@@ -112,6 +113,7 @@ class  PaymentController
             const { order_id , vnp_ResponseCode } = req.query;
             if(vnp_ResponseCode == '00'){
                 await paymentService.updateOder(order_id);
+                await paymentService.updateNumberSold(order_id);
                 const redirectUrl = 'http://localhost:3002/order-complete?orderId=' + order_id + 'status=success';
                 return res.writeHead(301, { Location: redirectUrl }).end();
             } else {
