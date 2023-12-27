@@ -112,11 +112,11 @@ class  PaymentController
             const { order_id , vnp_ResponseCode } = req.query;
             if(vnp_ResponseCode == '00'){
                 await paymentService.updateOder(order_id);
-                const redirectUrl = 'http://localhost:4000/order-complete?orderId=' + order_id + 'status=success';
+                const redirectUrl = 'http://localhost:3002/order-complete?orderId=' + order_id + 'status=success';
                 return res.writeHead(301, { Location: redirectUrl }).end();
             } else {
                 await paymentService.cancelPayment(order_id);
-                const redirectUrl = 'http://localhost:4000/checkout?orderId=' + order_id + 'status=failed';
+                const redirectUrl = 'http://localhost:3002/checkout?orderId=' + order_id + 'status=failed';
                 return res.writeHead(301, { Location: redirectUrl }).end();
             }
         } catch (error) {
