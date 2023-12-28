@@ -1,5 +1,5 @@
 
-import { Order, Product } from "../../database/models";
+import { Order, Product, Supplier } from "../../database/models";
 
 class StatisticalService {
   async getListIdProduct(supplierId) {
@@ -75,8 +75,10 @@ class StatisticalService {
     return { totalProductResult, totalMoney, orders };
   }
 
-  checkAccessStatistical(supplierId, userId) {
-    return supplierId === userId || userId === '65222936f112a74c76427635';
+  async checkAccessStatistical(supplierId, userId) {
+    const userIdOfSupplier:any = await Supplier.find({ _id: supplierId }).populate('userID');
+    // console.log(userIdOfSupplier + ' ' + userId);
+    return userIdOfSupplier === userId || userId === '65222936f112a74c76427635';
   }
 
   async getStatisticalGrowth(supplierId, userId, month, year, yearCompare, monthCompare) {
