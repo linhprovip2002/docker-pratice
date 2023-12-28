@@ -4,7 +4,7 @@ import { statisticalController } from './index';
 
 const router = express.Router();
 
-router.get('/',checkAuthor(['Authorization']), statisticalController.getStatisticalAdmin);
+router.patch('/',checkAuthor(['Authorization']), statisticalController.getStatisticalAdmin);
 router.get('/:id',checkAuthor(['Authorization','Supplier']), statisticalController.getStatistical);
 
 
