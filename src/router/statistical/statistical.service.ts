@@ -118,53 +118,57 @@ class StatisticalService {
   
   //   return resultArray;
   // }
-    const startDate = new Date(`${startDay.split('-').reverse().join('-')}T00:00:00.000Z`);
-    const endDate = new Date(`${endDay.split('-').reverse().join('-')}T23:59:59.999Z`);
+  const startDate = new Date(`${startDay.split('-').reverse().join('-')}T00:00:00.000Z`);
+  const endDate = new Date(`${endDay.split('-').reverse().join('-')}T23:59:59.999Z`);
   
-    const resultArray = await Supplier.aggregate([
-      {
-        $lookup: {
-          from: 'products', // Use the actual name of your products collection
-          localField: '_id',
-          foreignField: 'IDSupplier',
-          as: 'products',
-        },
+  const resultArray = await Supplier.aggregate([
+    {
+      $lookup: {
+        from: 'products',
+        localField: '_id',
+        foreignField: 'IDSupplier',
+        as: 'products',
       },
-      {
-        $unwind: '$products',
-      },
-      {
-        $lookup: {
-          from: 'orders', // Use the actual name of your orders collection
-          let: { productId: '$products._id' },
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $and: [
-                    { $eq: ['$statusOrder', 'PAYMENT_SUCCESS'] },
-                    { $gte: ['$createdAt', startDate] },
-                    { $lt: ['$createdAt', endDate] },
-                    { $in: ['$$productId', '$IDProduct'] },
-                  ],
-                },
+    },
+    {
+      $unwind: '$products',
+    },
+    {
+      $lookup: {
+        from: 'orders',
+        let: { productId: '$products._id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ['$statusOrder', 'PAYMENT_SUCCESS'] },
+                  { $gte: ['$createdAt', startDate] },
+                  { $lt: ['$createdAt', endDate] },
+                  { $in: ['$$productId', '$IDProduct'] },
+                ],
               },
             },
-          ],
-          as: 'orders',
-        },
+          },
+        ],
+        as: 'orders',
       },
-      {
-        $group: {
-          _id: '$_id',
-          companyName: { $first: '$companyName' },
-          logoImage: { $first: '$logoImage' },
-          productsSold: { $sum: { $size: '$orders' } },
-        },
+    },
+    {
+      $unwind: '$orders', // Unwind the 'orders' array
+    },
+    {
+      $group: {
+        _id: '$_id',
+        companyName: { $first: '$companyName' },
+        logoImage: { $first: '$logoImage' },
+        productsSold: { $sum: 1 }, // Count the number of orders
+        total: { $sum: '$orders.total' }, // Sum up the 'total' field from individual orders
       },
-    ]);
+    },
+  ]);
   
-    return resultArray;
+  return resultArray;
   }
   
 }
