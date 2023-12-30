@@ -5,7 +5,8 @@ import { statisticalController } from './index';
 const router = express.Router();
 
 router.patch('/',checkAuthor(['Authorization']), statisticalController.getStatisticalAdmin);
-router.get('/:id',checkAuthor(['Authorization','Supplier']), statisticalController.getStatistical);
+// router.get('/',checkAuthor(['Authorization']), statisticalController.getStatisticalAdmin);
+router.patch('/:id',checkAuthor(['Authorization','Supplier']), statisticalController.getStatistical);
 
 
 export default router;
