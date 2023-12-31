@@ -19,8 +19,8 @@ router.get('/products',verify,checkAuthor(['read supplier']) ,supplierController
 
 router.post('/',verify, checkAuthor(['create supplier']), validatorSupplier, supplierController.createSupplier);
 router.put('/:id',verify, checkAuthor(['update supplier']), supplierController.updateSupplier); 
-router.get('/', supplierController.getAllSuppliers);
-router.get('/:id', supplierController.getDetail);
+router.get('/',checkAuthor(['Authorization']), supplierController.getAllSuppliers);
+router.get('/:id',checkAuthor(['read supplier']), supplierController.getDetail);
 
 
 

@@ -22,5 +22,14 @@ class statisticalController {
              next(error);
         }
    }
+   async getTotal(req, res, next) {
+            try {
+                const { id } = req.params;
+                const result = await statisticalService.getTotal(id);
+                res.status(200).json(result);
+            } catch (error) {
+                next(error);
+            }
+     }
 }
 export default new statisticalController();

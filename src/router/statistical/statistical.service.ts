@@ -131,7 +131,10 @@ class StatisticalService {
       },
     },
     {
-      $unwind: '$products',
+      $unwind: {
+        path: '$products',
+        preserveNullAndEmptyArrays: true // Giữ lại các nhà cung cấp không có sản phẩm
+      },
     },
     {
       $lookup: {
@@ -155,21 +158,34 @@ class StatisticalService {
       },
     },
     {
-      $unwind: '$orders', // Unwind the 'orders' array
+      $unwind: {
+        path: '$orders',
+        preserveNullAndEmptyArrays: true // Giữ lại các nhà cung cấp không có đơn đặt hàng
+      },
     },
     {
       $group: {
         _id: '$_id',
         companyName: { $first: '$companyName' },
         logoImage: { $first: '$logoImage' },
-        productsSold: { $sum: 1 }, // Count the number of orders
-        total: { $sum: '$orders.total' }, // Sum up the 'total' field from individual orders
+        productsSold: { $sum: { $cond: { if: { $gt: ['$orders', null] }, then: 1, else: 0 } } }, // Đếm số lượng đơn đặt hàng
+        total: { $sum: { $ifNull: ['$orders.total', 0] } }, // Tổng giá trị 'total' từ các đơn đặt hàng
       },
     },
   ]);
   
   return resultArray;
-  }
+}
+async getTotal(supplierId) {
+  const arrayIdProduct = await this.getListIdProduct(supplierId);
+  const query = {
+    IDProduct: { $in: arrayIdProduct }, // Fix: Correct the syntax for $in
+    statusOrder: "PAYMENT_SUCCESS", // Fix: Removed semicolon and corrected the syntax
+  };
+  
+  const data = await Order.find(query);
+  return data;
+}
   
 }
 
