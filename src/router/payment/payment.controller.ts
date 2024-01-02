@@ -24,7 +24,6 @@ class  PaymentController
             await paymentService.updateOder(orderId);
             await paymentService.updateNumberSold(orderId);
             await paymentService.executePayment(paymentId, PayerID,total);
-            console.log('http://localhost:3002/order-complete?orderId' + orderId);
             const redirectUrl = 'http://localhost:3002/order-complete?orderId=' + orderId + 'status=success';
             return res.writeHead(301, { Location: redirectUrl }).end();
         } catch (err) {
@@ -100,7 +99,6 @@ class  PaymentController
             let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
             vnp_Params['vnp_SecureHash'] = signed;
             vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
-            console.log('------------------vnpUrl ',vnpUrl);
             // return res.writeHead(301, { Location: vnpUrl }).end();
             return res.status(200).json({ vnpUrl });
             

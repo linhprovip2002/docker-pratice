@@ -159,6 +159,37 @@ class AuthenticationService {
             throw error;
         }
     }
+    async changePassword(userId, oldPassword, newPassword) {
+        try {
+            // Find the user by userId and populate the account information
+            const user:any = await User.findOne({ _id: userId, deleted: false }).populate({ path: 'account', select: 'password salt' });
+    
+            if (!user) {
+                throw new Error("User not found");
+            }
+    
+            // Verify old password
+            const hashPasswordUser = hashPasswordSalt(user.account.salt, oldPassword);
+            if (hashPasswordUser !== user.account.password) {
+                throw new Error("Old password incorrect");
+            }
+    
+            // Find the account by id
+            const account = await Account.findOne({ _id: user.account._id, deleted: false });
+            if (!account) {
+                throw new Error("Account not found");
+            }
+    
+            // Update the account with the new password
+            const newPasswordHash:any = hashPassword(newPassword);
+            await Account.findOneAndUpdate({ _id: account._id }, { password: newPasswordHash.passwordHashed, salt: newPasswordHash.salt });
+    
+        } catch (error) {
+            console.error("Error changing password:", error);
+            throw error;
+        }
+    }
+    
 }
 
 export default new AuthenticationService();

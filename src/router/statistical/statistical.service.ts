@@ -36,10 +36,6 @@ class StatisticalService {
         },
         IDProduct: { $in: arrayIdProduct },
       };
-  
-      console.log(`Query for ${currentDate.toISOString().split('T')[0]}`);
-      console.log(query);
-  
       const results = await Order.find(query);
       const total = results.reduce((acc, order) => acc + order.total, 0);
       let soldNumber = Math.floor(Math.random() * 5) + 1 + results.length;

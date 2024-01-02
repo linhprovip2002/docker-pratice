@@ -52,6 +52,16 @@ class AuthenticationController {
             next(error);
           }
     }
+    async changePassword(req, res, next) {
+        try {
+            const userId = req.userToken.IDUser;
+            const { oldPassword, newPassword } = req.body;
+            await authenticateService.changePassword(userId, oldPassword, newPassword);
+            return res.status(200).json({message:"Password changed successfully."});
+        } catch (error) {
+            next(error);
+            }
+        }
 
 }
 export default new AuthenticationController();

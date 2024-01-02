@@ -118,7 +118,6 @@ class PaymentService {
         });
     }
     async updateOder(oderId) {  
-          console.log("vao day", oderId)
           return  await Order.findByIdAndUpdate(
             { _id: oderId},
             {
@@ -129,9 +128,7 @@ class PaymentService {
         );
     }
     async updateNumberSold(oderId) {
-        console.log("vao day dem number da ban", oderId)
         const order:any = await Order.findById({ _id: oderId, deleted: false, statusOrder: statusOrder.PAYMENT_SUCCESS });
-        console.log(" order id product id", order.IDProduct[0])
         const product:any = await Product.findById({ _id: order.IDProduct[0], deleted: false });
         await Product.findOneAndUpdate(
             {product},
