@@ -136,7 +136,8 @@ class PaymentService {
         await Product.findOneAndUpdate(
             {product},
             {
-              soldNumber: product.soldNumber + 1
+              soldNumber: product.soldNumber + 1,
+              quantity: product.quantity - 1
             },
             { new: true }
         );
