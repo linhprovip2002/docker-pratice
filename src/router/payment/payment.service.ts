@@ -2,6 +2,7 @@ import { paymentConfig } from '../../database/config';
 import { Order,Product } from '../../database/models';
 import paypal from 'paypal-rest-sdk';
 import { statusOrder } from '../../database/models/enum';
+import { base_URL } from '../../constant';
 
 class PaymentService {
 
@@ -50,8 +51,8 @@ class PaymentService {
           payment_method: 'paypal',
         },
         redirect_urls: {
-          return_url: `http://localhost:3000/api/payment/confirm/success?total=${price}&orderId=${orderId}`,
-          cancel_url: `http://localhost:3000/api/payment/confirm/cancel?orderId=${orderId}`,
+          return_url: `${base_URL}/api/payment/confirm/success?total=${price}&orderId=${orderId}`,
+          cancel_url: `${base_URL}/api/payment/confirm/cancel?orderId=${orderId}`,
         },
         transactions: [
           {
@@ -117,7 +118,8 @@ class PaymentService {
         });
     }
     async updateOder(oderId) {  
-        await Order.findByIdAndUpdate(
+          console.log("vao day", oderId)
+          return  await Order.findByIdAndUpdate(
             { _id: oderId},
             {
                 statusOrder: statusOrder.PAYMENT_SUCCESS,
@@ -127,12 +129,14 @@ class PaymentService {
         );
     }
     async updateNumberSold(oderId) {
+        console.log("vao day dem number da ban", oderId)
         const order:any = await Order.findById({ _id: oderId, deleted: false, statusOrder: statusOrder.PAYMENT_SUCCESS });
-        const product:any = await Product.findById({ _id: order.IDProduct, deleted: false });
-        await Product.findByIdAndUpdate(
-            { _id: order.product},
+        console.log(" order id product id", order.IDProduct[0])
+        const product:any = await Product.findById({ _id: order.IDProduct[0], deleted: false });
+        await Product.findOneAndUpdate(
+            {product},
             {
-              soldNumber: product.numberSold + 1
+              soldNumber: product.soldNumber + 1
             },
             { new: true }
         );
