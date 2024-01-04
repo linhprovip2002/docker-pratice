@@ -127,18 +127,42 @@ class PaymentService {
             { new: true }
         );
     }
-    async updateNumberSold(oderId) {
-        const order:any = await Order.findById({ _id: oderId, deleted: false, statusOrder: statusOrder.PAYMENT_SUCCESS });
-        const product:any = await Product.findById({ _id: order.IDProduct[0], deleted: false });
-        await Product.findOneAndUpdate(
-            {product},
-            {
-              soldNumber: product.soldNumber + 1,
-              quantity: product.quantity - 1
-            },
-            { new: true }
-        );
-    }
+    async updateNumberSold(orderId) {
+      try {
+          // Use proper casing for variable names (orderId instead of oderId)
+          const order = await Order.findOne({ _id: orderId, deleted: false, statusOrder: statusOrder.PAYMENT_SUCCESS });
+  
+          if (!order) {
+              // Handle the case where the order is not found
+              console.log("Order not found or not in the correct state");
+              return;
+          }
+  
+  
+          const product = await Product.findOne({ _id: order.IDProduct[0], deleted: false });
+  
+          if (!product) {
+              // Handle the case where the product is not found
+              console.log("Product not found");
+              return;
+          }
+  
+          // Use findOneAndUpdate directly on the Product model
+          const updatedProduct = await Product.findOneAndUpdate(
+              { _id: order.IDProduct[0], deleted: false },
+              {
+                  $inc: { soldNumber: 1, quantity: -1 } // Use $inc to increment and decrement values
+              },
+              { new: true }
+          );
+  
+          console.log("updatedProduct --------------> ", updatedProduct);
+      } catch (error) {
+          console.error("Error updating number sold:", error);
+          // Handle the error as needed
+      }
+  }
+  
     async cancelPayment(oderId) {
       return await Order.findByIdAndUpdate(
           { _id: oderId},

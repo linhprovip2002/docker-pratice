@@ -8,7 +8,6 @@ class SupplierService {
 
     async checkAccessSupplier(supplierID, userID) {
         try {
-            console.log(supplierID + ' ' + userID); 
             
             const supplier = await Supplier.findById(supplierID).where({deleted: false, status: 'accepted'});
             // Nếu Supplier không được tìm thấy, trả về false

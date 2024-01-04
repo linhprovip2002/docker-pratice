@@ -101,7 +101,6 @@ class ProductService {
         if (!supplier) {
             throw new Error('Supplier not found');
         }
-        console.log("----------------------->",supplier)
         console.log(body);
         const product = new Product({
             IDSupplier: supplier._id,
